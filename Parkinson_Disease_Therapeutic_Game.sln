@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkinson_Disease_Therapeutic_Game.CSharp.Plugins", "Parkinson_Disease_Therapeutic_Game.CSharp.Plugins.csproj", "{71E50122-0145-7BE0-B4E9-91363F946DC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkinson_Disease_Therapeutic_Game.CSharp", "Parkinson_Disease_Therapeutic_Game.CSharp.csproj", "{D29390B6-D312-D943-0F1D-0310AA8DB670}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkinson_Disease_Therapeutic_Game.CSharp.Editor.Plugins", "Parkinson_Disease_Therapeutic_Game.CSharp.Editor.Plugins.csproj", "{3ACB5474-99EB-6B71-91D4-3135F41EA8C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkinson_Disease_Therapeutic_Game.CSharp.Editor", "Parkinson_Disease_Therapeutic_Game.CSharp.Editor.csproj", "{4CD7EBB1-AA35-32C0-4C4A-FD21A6F8C6A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{71E50122-0145-7BE0-B4E9-91363F946DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71E50122-0145-7BE0-B4E9-91363F946DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71E50122-0145-7BE0-B4E9-91363F946DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71E50122-0145-7BE0-B4E9-91363F946DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D29390B6-D312-D943-0F1D-0310AA8DB670}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D29390B6-D312-D943-0F1D-0310AA8DB670}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D29390B6-D312-D943-0F1D-0310AA8DB670}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D29390B6-D312-D943-0F1D-0310AA8DB670}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3ACB5474-99EB-6B71-91D4-3135F41EA8C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3ACB5474-99EB-6B71-91D4-3135F41EA8C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3ACB5474-99EB-6B71-91D4-3135F41EA8C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3ACB5474-99EB-6B71-91D4-3135F41EA8C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CD7EBB1-AA35-32C0-4C4A-FD21A6F8C6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CD7EBB1-AA35-32C0-4C4A-FD21A6F8C6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CD7EBB1-AA35-32C0-4C4A-FD21A6F8C6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CD7EBB1-AA35-32C0-4C4A-FD21A6F8C6A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

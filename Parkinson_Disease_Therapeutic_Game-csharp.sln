@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{01429D05-7CFB-805B-DF86-3F541DDB3025}") = "Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-firstpass-vs.csproj", "{2308F5AE-24F2-7807-E06B-DBB9101C0148}"
+EndProject
+Project("{01429D05-7CFB-805B-DF86-3F541DDB3025}") = "Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-vs.csproj", "{EF81D9A7-2742-F821-92CF-072F949C3121}"
+EndProject
+Project("{01429D05-7CFB-805B-DF86-3F541DDB3025}") = "Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-Editor-firstpass-vs.csproj", "{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	
+EndGlobal
