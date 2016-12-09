@@ -1,0 +1,22 @@
+# This is a comment. MAX_REACH is the distance we got from the calibration screen which means that is the farthest participant can reach.
+
+# Define how many positions do you want  participant and MAX_REACH
+POS_BELOW_MAX_REACH=2
+
+# Define how many positions do you want that is FAR than MAX_REACH
+POS_ABOVE_MAX_REACH=3
+
+# Define how many positions do you want for each position. The total number of trials will be = (POS_BELOW_MAX_REACH + POS_ABOVE_MAX_REACH) * NUMBER_OF_TRIAL_PER_POSITION
+NUMBER_OF_TRIAL_PER_POSITION=3
+
+# This is the time participant will get to reach the target after they guessed they can reach the target.
+REMAINING_TIME_TO_TOUCH_TARGET=5
+
+# This is the time interval between two trials.
+NEXT_TRIAL_START_TIME=5
+
+# Minimum distance a target may be placed is = MAX_REACH - LOWER_RANGE. Please be noted that if you place '5' here it will be treated as 0.5 in code.
+LOWER_RANGE=3
+
+# Maximum distance a target may be placed is = MAX_REACH + HIGHER_RANGE. Please be noted that if you place '5' here it will be treated as 0.5 in code.
+HIGHER_RANGE=5
