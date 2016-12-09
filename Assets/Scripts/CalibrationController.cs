@@ -23,17 +23,17 @@ public class CalibrationController : MonoBehaviour {
 
         pauseB.SetActive(false);
         goodByePanel.SetActive(false);
-        pmc = (PlayerMovementController)player.GetComponent("PlayerMovementController");
-        instAudioSource = (AudioSource)this.GetComponent<AudioSource>();
+        pmc = ( PlayerMovementController ) player.GetComponent("PlayerMovementController");
+        instAudioSource = ( AudioSource ) this.GetComponent<AudioSource>();
         //Debug.Log("instAudioSource = " + instAudioSource);
 
         pmc.isPlayerMovementAllowed = false;
 
-        ts = (TimerScript)timetTextT.GetComponent("TimerScript");
+        ts = ( TimerScript ) timetTextT.GetComponent("TimerScript");
     }
 
     public void Update() {
-        if (pmc.gp.getIsGameOver()) {
+        if ( pmc.gp.getIsGameOver() ) {
             goodByePanel.SetActive(true);
             Time.timeScale = 0;
         }
@@ -88,7 +88,7 @@ public class CalibrationController : MonoBehaviour {
         pmc.setIsDemo(isdemo);
         pmc.isThirdPersonCam(isThirdPersonCam);
 
-        if (isdemo) {
+        if ( isdemo ) {
             AudioFinished();
         } else {
             // play the audio.
@@ -100,7 +100,7 @@ public class CalibrationController : MonoBehaviour {
 
     public delegate void AudioCallback();
     private void PlaySoundWithCallback(AudioClip clip, AudioCallback callback) {
-        if (pmc.isDemo) {
+        if ( pmc.isDemo ) {
             Debug.Log("isDemo " + pmc.isDemo);
             AudioFinished();
             return;
@@ -122,7 +122,7 @@ public class CalibrationController : MonoBehaviour {
         calScreenPanel.SetActive(true);
         calStartB.SetActive(true);
 
-        if (instAudioSource.isPlaying) {
+        if ( instAudioSource.isPlaying ) {
             instAudioSource.Stop();
         }
 
@@ -130,7 +130,7 @@ public class CalibrationController : MonoBehaviour {
 
     public void onClickPauseButton() {
         string text = "";
-        if (isGamePaused) {
+        if ( isGamePaused ) {
             Time.timeScale = 1;
             text = "Pause";
         } else {

@@ -47,7 +47,7 @@ public class GamePlayScript {
     }
 
     public void pickUpMedecine() {
-        if (isMedecineTaskDone == false) {
+        if ( isMedecineTaskDone == false ) {
             this.isMedecineTaskDone = true;
             numberOfTaskCompleted++;
         } else {
@@ -56,14 +56,14 @@ public class GamePlayScript {
     }
 
     public void pickUpPhone() {
-        if (this.currentRunNumber == 0 || this.currentRunNumber == 5) {
-            if (isPhoneTaskDone == false) {
+        if ( this.currentRunNumber == 0 || this.currentRunNumber == 5 ) {
+            if ( isPhoneTaskDone == false ) {
                 isPhoneTaskDone = true;
                 numberOfTaskCompleted++;
             }
 
         } else {
-            if (isTaskPhone && !isDuplicate) {
+            if ( isTaskPhone && !isDuplicate ) {
                 isPhoneTaskDone = true;
                 numberOfTaskCompleted++;
                 isDuplicate = true;
@@ -74,13 +74,13 @@ public class GamePlayScript {
     public void pickUpDoor(string callingFunc) {
         //Debug.Log ( callingFunc );
         //Debug.Log ( "pickUpDoor : numberOfTaskCompleted = " + numberOfTaskCompleted );
-        if (this.currentRunNumber == 0 || this.currentRunNumber == 5) {
-            if (isDoorTaskDone == false) {
+        if ( this.currentRunNumber == 0 || this.currentRunNumber == 5 ) {
+            if ( isDoorTaskDone == false ) {
                 isDoorTaskDone = true;
                 numberOfTaskCompleted++;
             }
         } else {
-            if (isTaskDoor && !isDuplicate) {
+            if ( isTaskDoor && !isDuplicate ) {
                 numberOfTaskCompleted++;
                 isDuplicate = true;
             }
@@ -98,36 +98,36 @@ public class GamePlayScript {
         isMedecineTaskDone = false;
 
         initializeScore();
-        if (currentRunNumber == 0) {
+        if ( currentRunNumber == 0 ) {
             typeOfTask = 2;
-        } else if (currentRunNumber == 1) {
+        } else if ( currentRunNumber == 1 ) {
             typeOfTask = 1;
-        } else if (currentRunNumber == 5) {
+        } else if ( currentRunNumber == 5 ) {
             typeOfTask = 0;
         }
-        switch (typeOfTask) {
+        switch ( typeOfTask ) {
             case 0:     //Trial
-            isTaskPhone = true;
-            isTaskDoor = true;
-            isTaskRedMedecine = true;
-            break;
+                isTaskPhone = true;
+                isTaskDoor = true;
+                isTaskRedMedecine = true;
+                break;
             case 1:     //Answer the Phone
-            isTaskPhone = true;
-            isTaskDoor = false;
-            isTaskRedMedecine = true;
-            break;
+                isTaskPhone = true;
+                isTaskDoor = false;
+                isTaskRedMedecine = true;
+                break;
             case 2:     //Answer the door
-            isTaskPhone = false;
-            isTaskDoor = true;
-            isTaskRedMedecine = false;
-            break;
+                isTaskPhone = false;
+                isTaskDoor = true;
+                isTaskRedMedecine = false;
+                break;
         }
     }
 
     public int getIndexOfTask() {
-        if (isTaskPhone) {
+        if ( isTaskPhone ) {
             return 1;   // RIGHT_PHONE_RED
-        } else if (isTaskDoor) {
+        } else if ( isTaskDoor ) {
             return 0;   // LEFT_DOOR_YELLOW
         }
         return 0;

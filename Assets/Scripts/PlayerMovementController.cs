@@ -139,9 +139,9 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     void Awake() {
-        if (Application.platform == RuntimePlatform.WindowsWebPlayer ||
-           Application.platform == RuntimePlatform.OSXWebPlayer) {
-            if (Security.PrefetchSocketPolicy(ipUIVAServer, 843, 500)) {
+        if ( Application.platform == RuntimePlatform.WindowsWebPlayer ||
+           Application.platform == RuntimePlatform.OSXWebPlayer ) {
+            if ( Security.PrefetchSocketPolicy(ipUIVAServer, 843, 500) ) {
                 Debug.Log("Got socket policy");
             } else {
                 Debug.Log("Cannot get socket policy");
@@ -162,13 +162,13 @@ public class PlayerMovementController : MonoBehaviour {
         //################################ NEW KINECT CODE ##########################
         kinectSensor = KinectSensor.GetDefault();
 
-        if (kinectSensor != null) {
+        if ( kinectSensor != null ) {
             bodyFrameReader = kinectSensor.BodyFrameSource.OpenReader();
 
-            if (!kinectSensor.IsOpen) {
+            if ( !kinectSensor.IsOpen ) {
                 kinectSensor.Open();
             }
-            if (bodyFrameReader != null) {
+            if ( bodyFrameReader != null ) {
                 bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
             }
         } else {
@@ -191,19 +191,19 @@ public class PlayerMovementController : MonoBehaviour {
     void initializeGame() {
 
         showPhone(true);	// showing normal state.
-        for (int i = 0; i < blockWall.Length; i++) {
+        for ( int i = 0; i < blockWall.Length; i++ ) {
             blockWall[i].SetActive(true);
         }
         //initialize medicine pack
-        for (int i = 0; i < medicinePack.Length; i++) {
+        for ( int i = 0; i < medicinePack.Length; i++ ) {
             medicinePack[i].SetActive(true);
         }
 
         int medNumber = gp.getRandomNumber(0, medicinePack.Length);
         //initialize the color tag
-        for (int i = 0; i < medicinePack.Length; i++) {
+        for ( int i = 0; i < medicinePack.Length; i++ ) {
             medNumber += i;
-            if (medNumber >= medicinePack.Length) {
+            if ( medNumber >= medicinePack.Length ) {
                 medNumber -= medicinePack.Length;
             }
             medicinePack[medNumber].tag = medColor[i];
@@ -212,7 +212,7 @@ public class PlayerMovementController : MonoBehaviour {
 
         int randomN;
         //Debug.Log ( "gp.currentRunNumber = " + gp.currentRunNumber );
-        if (gp.currentRunNumber == -1) {
+        if ( gp.currentRunNumber == -1 ) {
             randomN = 0;
         } else {
             randomN = gp.getRandomNumber(1, 3);
@@ -227,8 +227,8 @@ public class PlayerMovementController : MonoBehaviour {
 
         outsideAvatar.SetActive(false);
 
-        if (gp.currentRunNumber > 0) {
-            ((TimerScript)timerGameObject.GetComponent("TimerScript")).showTime(true);
+        if ( gp.currentRunNumber > 0 ) {
+            ( ( TimerScript ) timerGameObject.GetComponent("TimerScript") ).showTime(true);
         }
     }
 
@@ -241,7 +241,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     void hideDeliveredPackate() {
         GameObject g = GameObject.FindGameObjectWithTag("PACKATE_RECEIVED");
-        if (g != null) g.SetActive(false);
+        if ( g != null ) g.SetActive(false);
 
         packageReady = false;
     }
@@ -249,16 +249,16 @@ public class PlayerMovementController : MonoBehaviour {
     long fileCounter = 0;
     void Update() {
         fileCounter += 1;
-        
+
         /*if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
             Debug.Log("SHIFT");
             if (Input.GetKeyDown(KeyCode.S))
                 Debug.Log("SHIFT + S");
         }*/
 
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            
-            if (!reachForObject) {
+        if ( Input.GetKeyDown(KeyCode.Space) ) {
+
+            if ( !reachForObject ) {
                 reachForObject = true;
                 animator.SetFloat("_Forward", 0);
                 animator.SetFloat("_Turn", 0);
@@ -274,48 +274,48 @@ public class PlayerMovementController : MonoBehaviour {
                 animator.speed = 0.75f;
             }
 
-            if (reachForObject && packageReady) {
+            if ( reachForObject && packageReady ) {
                 outsideAvatar.GetComponent<Animator>().SetBool("deliverThePackage", false);
                 GameObject g = GameObject.FindGameObjectWithTag("PACKATE_DELIVERY");
-                if (g != null)
+                if ( g != null )
                     g.SetActive(false);
                 g = GameObject.FindGameObjectWithTag("PACKATE_RECEIVED");
-                if (g != null)
+                if ( g != null )
                     g.SetActive(true);
                 Invoke("hideDeliveredPackate", 3);
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.K)) {
-            moveLeftOrRightTimerStarted = true;            
+        if ( Input.GetKeyDown(KeyCode.K) ) {
+            moveLeftOrRightTimerStarted = true;
             animator.SetFloat("_Forward", 0);
             animator.SetFloat("_Turn", 0);
             animator.SetFloat("_Strafe", 1);
-            
 
-        } else if (Input.GetKeyDown(KeyCode.H)) {
-            moveLeftOrRightTimerStarted = true;            
+
+        } else if ( Input.GetKeyDown(KeyCode.H) ) {
+            moveLeftOrRightTimerStarted = true;
             animator.SetFloat("_Forward", 0);
             animator.SetFloat("_Turn", 0);
             animator.SetFloat("_Strafe", -1);
         }
 
-        if (walkTimerStarted) {
+        if ( walkTimerStarted ) {
             walkTime -= 1;
-            if (walkTime <= 0.0f) {
+            if ( walkTime <= 0.0f ) {
                 walkTimerEnded();
             }
         }
-        if (turnTimerStarted) {
+        if ( turnTimerStarted ) {
             turnTime -= 1;
-            if (turnTime <= 0.0f) {
+            if ( turnTime <= 0.0f ) {
                 turnTimerEnded();
             }
         }
 
-        if (moveLeftOrRightTimerStarted) {
+        if ( moveLeftOrRightTimerStarted ) {
             moveLeftOrRightTime -= 1;
-            if (moveLeftOrRightTime <= 0.0f) {
+            if ( moveLeftOrRightTime <= 0.0f ) {
                 moveLeftOrRightTimerEnded();
             }
         }
@@ -324,7 +324,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     void FixedUpdate() {
         //Debug.Log("isKeyboardControlled = " + isKeyboardControlled + " isPlayerMovementAllowed = " + isPlayerMovementAllowed);
-        if (isKeyboardControlled && isPlayerMovementAllowed) {
+        if ( isKeyboardControlled && isPlayerMovementAllowed ) {
             moveH = Input.GetAxis("Horizontal");
             moveV = Input.GetAxis("Vertical");
             //animator.SetFloat("Walk", moveV);
@@ -340,7 +340,7 @@ public class PlayerMovementController : MonoBehaviour {
 
             getWiiAndKinectData();    //1
             //isCalibrationDone = true;
-            if (isCalibrationStarted && !isCalibrationDone) {
+            if ( isCalibrationStarted && !isCalibrationDone ) {
                 calibrateData();      //2
                 return;
             }
@@ -348,26 +348,26 @@ public class PlayerMovementController : MonoBehaviour {
             string calData = "";
             //if (isCalibrationDone) {
             controllPlayer();		//3
-            if (count < 2) {
+            if ( count < 2 ) {
                 count++;
                 calData += "wristCounter = " + wristCounter +
-                           " leftWristC = " + (leftWristC / wristCounter) +
-                           ", rightWristC = " + (rightWristC / wristCounter) +
-                           ", leftFootC = " + (leftFootC / footCounter) +
-                           ", rightWristC = " + (rightWristC / wristCounter) +
-                           ", gravX = " + (gravXC / gravCalibrationCX) +
-                           ", gravY = " + (gravYC / gravCalibrationCX) + "\n";
+                           " leftWristC = " + ( leftWristC / wristCounter ) +
+                           ", rightWristC = " + ( rightWristC / wristCounter ) +
+                           ", leftFootC = " + ( leftFootC / footCounter ) +
+                           ", rightWristC = " + ( rightWristC / wristCounter ) +
+                           ", gravX = " + ( gravXC / gravCalibrationCX ) +
+                           ", gravY = " + ( gravYC / gravCalibrationCX ) + "\n";
                 //Debug.Log("Writing Caldata!");
-                writeTest(calData, "Data\\calData.csv");
+                UtilitiesScript.writeTest(calData, "Data\\calData.csv");
             }
             //}
         }
 
-        if (gp.isInBtnStartPointAndDoor) {
+        if ( gp.isInBtnStartPointAndDoor ) {
             gp.timeToCrossFirst3M[gp.currentRunNumber] += Time.deltaTime;
-        } else if (gp.isInBtnDoorAndJunction) {
+        } else if ( gp.isInBtnDoorAndJunction ) {
             gp.timeToCrossSecond3M[gp.currentRunNumber] += Time.deltaTime;
-        } else if (gp.isInBtnJunctionAndMedicine) {
+        } else if ( gp.isInBtnJunctionAndMedicine ) {
             gp.timeToCrossThird3M[gp.currentRunNumber] += Time.deltaTime;
         }
     }
@@ -375,20 +375,20 @@ public class PlayerMovementController : MonoBehaviour {
     private int count = 0;
 
     private void getWiiAndKinectData() {
-        if (theClient != null) {
+        if ( theClient != null ) {
             theClient.GetWiiFitGravityData(out weight, out gravX, out gravY, out fitbutt);
             theClient.GetWiiFitRawData(out topL, out topR, out bottomL, out bottomR, out pressOrRelease);
-            if (isCalibrationDone && isPlayerMovementAllowed) {
+            if ( isCalibrationDone && isPlayerMovementAllowed ) {
                 logData += weight + ",[X:Y] = [" + gravX + " : " + gravY + "]," + topL + "," + topR + "," + bottomL + "," + bottomR + "\n";
                 //Debug.Log ( logData );
             }
         }
 
-        if (bodyFrameReader != null) {
+        if ( bodyFrameReader != null ) {
             var frame = bodyFrameReader.AcquireLatestFrame();
 
-            if (frame != null) {
-                if (bodies == null) {
+            if ( frame != null ) {
+                if ( bodies == null ) {
                     bodies = new Body[kinectSensor.BodyFrameSource.BodyCount];
                 }
 
@@ -398,35 +398,35 @@ public class PlayerMovementController : MonoBehaviour {
                 frame = null;
 
                 int idx = -1;
-                for (int i = 0; i < kinectSensor.BodyFrameSource.BodyCount; i++) {
-                    if (bodies[i].IsTracked) {
+                for ( int i = 0; i < kinectSensor.BodyFrameSource.BodyCount; i++ ) {
+                    if ( bodies[i].IsTracked ) {
                         idx = i;
                     }
                 }
 
-                if (idx > -1) {
+                if ( idx > -1 ) {
 
                     float multiplier = 1;
 
-                    RIGHT_WRIST_POS[0] = Math.Abs((float)(bodies[idx].Joints[JointType.WristRight].Position.X * multiplier));
-                    RIGHT_WRIST_POS[1] = Math.Abs((float)(bodies[idx].Joints[JointType.WristRight].Position.Y * multiplier));
-                    RIGHT_WRIST_POS[2] = Math.Abs((float)(bodies[idx].Joints[JointType.WristRight].Position.Z * multiplier));
+                    RIGHT_WRIST_POS[0] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.WristRight].Position.X * multiplier ));
+                    RIGHT_WRIST_POS[1] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.WristRight].Position.Y * multiplier ));
+                    RIGHT_WRIST_POS[2] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.WristRight].Position.Z * multiplier ));
 
-                    LEFT_WRIST_POS[0] = Math.Abs((float)(bodies[idx].Joints[JointType.WristLeft].Position.X * multiplier));
-                    LEFT_WRIST_POS[1] = Math.Abs((float)(bodies[idx].Joints[JointType.WristLeft].Position.Y * multiplier));
-                    LEFT_WRIST_POS[2] = Math.Abs((float)(bodies[idx].Joints[JointType.WristLeft].Position.Z * multiplier));
+                    LEFT_WRIST_POS[0] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.WristLeft].Position.X * multiplier ));
+                    LEFT_WRIST_POS[1] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.WristLeft].Position.Y * multiplier ));
+                    LEFT_WRIST_POS[2] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.WristLeft].Position.Z * multiplier ));
 
-                    RIGHT_FOOT_POS[0] = Math.Abs((float)(bodies[idx].Joints[JointType.FootRight].Position.X * multiplier));
-                    RIGHT_FOOT_POS[1] = Math.Abs((float)(bodies[idx].Joints[JointType.FootRight].Position.Y * multiplier));
-                    RIGHT_FOOT_POS[2] = Math.Abs((float)(bodies[idx].Joints[JointType.FootRight].Position.Z * multiplier));
+                    RIGHT_FOOT_POS[0] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.FootRight].Position.X * multiplier ));
+                    RIGHT_FOOT_POS[1] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.FootRight].Position.Y * multiplier ));
+                    RIGHT_FOOT_POS[2] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.FootRight].Position.Z * multiplier ));
 
-                    LEFT_FOOT_POS[0] = Math.Abs((float)(bodies[idx].Joints[JointType.FootLeft].Position.X * multiplier));
-                    LEFT_FOOT_POS[1] = Math.Abs((float)(bodies[idx].Joints[JointType.FootLeft].Position.Y * multiplier));
-                    LEFT_FOOT_POS[2] = Math.Abs((float)(bodies[idx].Joints[JointType.FootLeft].Position.Z * multiplier));
+                    LEFT_FOOT_POS[0] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.FootLeft].Position.X * multiplier ));
+                    LEFT_FOOT_POS[1] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.FootLeft].Position.Y * multiplier ));
+                    LEFT_FOOT_POS[2] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.FootLeft].Position.Z * multiplier ));
 
-                    SPINE_SHOLDER_POS[0] = Math.Abs((float)(bodies[idx].Joints[JointType.SpineShoulder].Position.X * multiplier));
-                    SPINE_SHOLDER_POS[1] = Math.Abs((float)(bodies[idx].Joints[JointType.SpineShoulder].Position.Y * multiplier));
-                    SPINE_SHOLDER_POS[2] = Math.Abs((float)(bodies[idx].Joints[JointType.SpineShoulder].Position.Z * multiplier));
+                    SPINE_SHOLDER_POS[0] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.SpineShoulder].Position.X * multiplier ));
+                    SPINE_SHOLDER_POS[1] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.SpineShoulder].Position.Y * multiplier ));
+                    SPINE_SHOLDER_POS[2] = Math.Abs(( float ) ( bodies[idx].Joints[JointType.SpineShoulder].Position.Z * multiplier ));
 
                     leanX = bodies[idx].Lean.X;
                     leanY = bodies[idx].Lean.Y;
@@ -438,15 +438,15 @@ public class PlayerMovementController : MonoBehaviour {
     float leanX = 0.0f;
     float leanY = 0.0f;
     public void calibrateData() {
-        if (isCalibrationStarted) {
+        if ( isCalibrationStarted ) {
             //Debug.Log ( "isCalibrationStarted = " + isCalibrationStarted );
             //if ( gravX > gravCalibrationTh ) {
             gravCalibrationCX = gravCalibrationCX + 1;
-            gravXC = (gravXC + gravX);
+            gravXC = ( gravXC + gravX );
             //}
             //if ( gravY > gravCalibrationTh ) {
             gravCalibrationCY = gravCalibrationCY + 1;
-            gravYC = (gravYC + gravY);
+            gravYC = ( gravYC + gravY );
             //}
 
             leftWristC = LEFT_WRIST_POS[2] + leftWristC;
@@ -461,7 +461,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     public void controllPlayer() {
         //Debug.Log("isPlayerMovementAllowed = " + isPlayerMovementAllowed); 
-        if (!isPlayerMovementAllowed) {
+        if ( !isPlayerMovementAllowed ) {
             animator.SetFloat("_Forward", 0.0f);
             animator.SetFloat("_Turn", 0.0f);
             return;
@@ -480,13 +480,13 @@ public class PlayerMovementController : MonoBehaviour {
         float handForward = 0.4f;
         float handSideWise = 0.4f;
 
-        if ((SPINE_SHOLDER_POS[2] - LEFT_WRIST_POS[2] >= handForward)) {
+        if ( ( SPINE_SHOLDER_POS[2] - LEFT_WRIST_POS[2] >= handForward ) ) {
             reachForObject = true;
             animator.SetFloat("_Forward", 0);
             animator.SetFloat("_Turn", 0);
             animator.SetFloat("_Strafe", 0);
             animator.SetFloat("_Grab", -1);
-        } else if ((SPINE_SHOLDER_POS[2] - RIGHT_WRIST_POS[2] >= handForward)) {
+        } else if ( ( SPINE_SHOLDER_POS[2] - RIGHT_WRIST_POS[2] >= handForward ) ) {
             reachForObject = true;
             animator.SetFloat("_Forward", 0);
             animator.SetFloat("_Turn", 0);
@@ -497,25 +497,25 @@ public class PlayerMovementController : MonoBehaviour {
             animator.SetFloat("_Grab", 0);
         }
 
-        if (reachForObject && packageReady) {
+        if ( reachForObject && packageReady ) {
             outsideAvatar.GetComponent<Animator>().SetBool("deliverThePackage", false);
             GameObject g = GameObject.FindGameObjectWithTag("PACKATE_DELIVERY");
-            if (g != null)
+            if ( g != null )
                 g.SetActive(false);
             g = GameObject.FindGameObjectWithTag("PACKATE_RECEIVED");
-            if (g != null)
+            if ( g != null )
                 g.SetActive(true);
             Invoke("hideDeliveredPackate", 3);
         }
 
-        if (moveLeftOrRightTimerStarted == false) {
-            if ((LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0]) >= handSideWise) {
+        if ( moveLeftOrRightTimerStarted == false ) {
+            if ( ( LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
                 animator.SetFloat("_Forward", 0);
                 animator.SetFloat("_Turn", 0);
                 animator.SetFloat("_Strafe", -1);
                 animator.SetFloat("_Grab", 0);
                 moveLeftOrRightTimerStarted = true;
-            } else if ((RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0]) >= handSideWise) {
+            } else if ( ( RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
                 animator.SetFloat("_Forward", 0);
                 animator.SetFloat("_Turn", 0);
                 animator.SetFloat("_Strafe", 1);
@@ -530,19 +530,19 @@ public class PlayerMovementController : MonoBehaviour {
         rightFoot = Math.Abs(rightFoot);
 
 
-        float leftFootDisplacement = (float)(leftFoot - rightFoot);
-        float rightFootDisplacement = (float)(rightFoot - leftFoot);
+        float leftFootDisplacement = ( float ) ( leftFoot - rightFoot );
+        float rightFootDisplacement = ( float ) ( rightFoot - leftFoot );
 
-        if (leftFootDisplacement >= footMovementTh) {	//footMovementTh = 0.03
-            if (walkOnLeftF && !walkTimerStarted) {
+        if ( leftFootDisplacement >= footMovementTh ) {	//footMovementTh = 0.03
+            if ( walkOnLeftF && !walkTimerStarted ) {
                 walk = true;
                 walkOnLeftF = false;
                 walkOnRightF = true;
                 walkTimerStarted = true;
                 //Debug.Log ( "TIMER : START" );
             }
-        } else if (rightFootDisplacement >= footMovementTh) {
-            if (walkOnRightF && !walkTimerStarted) {
+        } else if ( rightFootDisplacement >= footMovementTh ) {
+            if ( walkOnRightF && !walkTimerStarted ) {
                 walk = true;
                 walkOnRightF = false;
                 walkOnLeftF = true;
@@ -551,21 +551,21 @@ public class PlayerMovementController : MonoBehaviour {
             }
         }
 
-        if (walk) {            
+        if ( walk ) {
             moveV = 1.0f;
-        } else {            
+        } else {
             /*##########################    WALK BACKWARD  KKKKKKKKKKKKKKKKKKKKKKKK  ##################################*/
-            if (Math.Abs(leanY) >= 0.5) {
+            if ( Math.Abs(leanY) >= 0.5 ) {
                 moveV = -1;
             } else {
                 moveV = 0.0f;
             }
-        }        
+        }
 
 
 
         /*##########################    TURN    ##################################*/
-        if (Math.Abs(leanX) >= 0.5) {
+        if ( Math.Abs(leanX) >= 0.5 ) {
             moveH = leanX / 2;
             //Debug.Log ( "moveH = " + moveH );
         } else {
@@ -593,7 +593,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     void moveLeftOrRightTimerEnded() {
         moveLeftOrRightTimerStarted = false;
-        moveLeftOrRight = false;        
+        moveLeftOrRight = false;
         moveLeftOrRightTime = MOVE_LEFT_OR_RIGHT_DURATION;
 
         animator.SetFloat("_Forward", 0);
@@ -605,37 +605,37 @@ public class PlayerMovementController : MonoBehaviour {
 
     void OnTriggerEnter(Collider other) {
         //Destroy(other.gameObject);        
-        if (other.gameObject.tag == "MEDICINE_RED"
+        if ( other.gameObject.tag == "MEDICINE_RED"
             || other.gameObject.tag == "MEDICINE_YELLOW"
             || other.gameObject.tag == "MEDICINE_PINK"
-            || other.gameObject.tag == "MEDICINE_BLUE") {
-            if (reachForObject) {
+            || other.gameObject.tag == "MEDICINE_BLUE" ) {
+            if ( reachForObject ) {
                 bool isProperMedicine = false;
-                if (gp.isTaskRedMedecine && other.gameObject.tag == "MEDICINE_RED") {
+                if ( gp.isTaskRedMedecine && other.gameObject.tag == "MEDICINE_RED" ) {
                     isProperMedicine = true;
-                } else if (!gp.isTaskRedMedecine && other.gameObject.tag == "MEDICINE_YELLOW") {
+                } else if ( !gp.isTaskRedMedecine && other.gameObject.tag == "MEDICINE_YELLOW" ) {
                     isProperMedicine = true;
                 }
-                if (isProperMedicine) {
-                    other.gameObject.SetActive(false);                    
+                if ( isProperMedicine ) {
+                    other.gameObject.SetActive(false);
                     gp.pickUpMedecine();
-                    if (gp.currentRunNumber < GamePlayScript.NUMBER_OF_RUN - 1) {
+                    if ( gp.currentRunNumber < GamePlayScript.NUMBER_OF_RUN - 1 ) {
                         closeHallway(0, true);
                         closeHallway(2, true);
                     }
                 } else {
-                    string hint = "Please pick up " + (gp.isTaskRedMedecine ? "RED " : "Yellow ") + " medicine!";
+                    string hint = "Please pick up " + ( gp.isTaskRedMedecine ? "RED " : "Yellow " ) + " medicine!";
                     Debug.Log(hint);
                 }
 
             }
         }
-        if (other.gameObject.tag == "PHONE_PICKUP_BOX" && reachForObject) {
+        if ( other.gameObject.tag == "PHONE_PICKUP_BOX" && reachForObject ) {
             showPhone(isPhonePicked);	// showing normal state.
 
             //rign the phone.
-            UnityEngine.AudioSource phoneRing = (UnityEngine.AudioSource)phonebooth.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
-            if (phoneRing.isPlaying) {
+            UnityEngine.AudioSource phoneRing = ( UnityEngine.AudioSource ) phonebooth.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
+            if ( phoneRing.isPlaying ) {
                 phoneRing.Stop();
                 //Debug.Log ( "pickUpPhone" );
                 gp.pickUpPhone();
@@ -644,47 +644,47 @@ public class PlayerMovementController : MonoBehaviour {
             isPhonePicked = !isPhonePicked;
         }
 
-        if (other.gameObject.tag == "START_POINT") {
-            if ((gp.currentRunNumber == GamePlayScript.NUMBER_OF_RUN - 1) && gp.isAllTaskDone()) {
+        if ( other.gameObject.tag == "START_POINT" ) {
+            if ( ( gp.currentRunNumber == GamePlayScript.NUMBER_OF_RUN - 1 ) && gp.isAllTaskDone() ) {
                 //GAME OVER!
                 Debug.Log("GAME OVER!");
                 gp.setIsGameOver(true);
-                writeTest(resultData, "Data\\ResultDataGameOver.csv");
-            } else if ((gp.currentRunNumber == 0 && gp.isAllTaskDone()) ||
-                  (gp.currentRunNumber > 0 && gp.isAllTaskDone() && gp.currentRunNumber < GamePlayScript.NUMBER_OF_RUN)) {
+                UtilitiesScript.writeTest(resultData, "Data\\ResultDataGameOver.csv");
+            } else if ( ( gp.currentRunNumber == 0 && gp.isAllTaskDone() ) ||
+                  ( gp.currentRunNumber > 0 && gp.isAllTaskDone() && gp.currentRunNumber < GamePlayScript.NUMBER_OF_RUN ) ) {
 
                 //write the current data and then initialize the game for next run                               
                 resultData += gp.currentRunNumber + "," + gp.timeToCrossFirst3M[gp.currentRunNumber] + "," + gp.timeToCrossSecond3M[gp.currentRunNumber] + "," + gp.timeToCrossThird3M[gp.currentRunNumber] + "\n";
-                writeTest(resultData, "Data\\ResultData.csv");
+                UtilitiesScript.writeTest(resultData, "Data\\ResultData.csv");
 
-                writeTest(logData, "Data\\Log.csv");
+                UtilitiesScript.writeTest(logData, "Data\\Log.csv");
                 initializeGame();
             }
 
         }
 
-        if (other.gameObject.tag == "BELL_OR_PHONE_RING") {
-            if (gp.isTaskPhone) {
+        if ( other.gameObject.tag == "BELL_OR_PHONE_RING" ) {
+            if ( gp.isTaskPhone ) {
                 phoneRing();
                 //also open the blocked hallway
                 closeHallway(0, false);
             }
-            if (gp.isTaskDoor) {
+            if ( gp.isTaskDoor ) {
                 doorBellRing();
                 outsideAvatar.SetActive(true);  // delivary boy is shown
                 closeHallway(2, false);
             }
         }
-        if (other.gameObject.tag == "GAME_INSTRUCTION_POINT") {
+        if ( other.gameObject.tag == "GAME_INSTRUCTION_POINT" ) {
             //Debug.Log("gp.playInstruction = " + gp.playInstruction + " gp.isComplexTaskTrial() = " + gp.isComplexTaskTrial());
-            if (gp.playInstruction && gp.isComplexTaskTrial()) {
+            if ( gp.playInstruction && gp.isComplexTaskTrial() ) {
                 gp.playInstruction = false;
                 //Debug.Log("Time to hear what to do in this run!");
                 //TODO show the hear again button!
                 int indexOfTask = gp.getIndexOfTask();
 
 
-                UnityEngine.AudioSource aS = (UnityEngine.AudioSource)this.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
+                UnityEngine.AudioSource aS = ( UnityEngine.AudioSource ) this.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
                 aS.clip = instructionClip[indexOfTask];
                 //Debug.Log("indexOfTask = " + indexOfTask + " aS = " + aS + " instructionClip[indexOfTask] = " + instructionClip[indexOfTask]);
 
@@ -692,11 +692,11 @@ public class PlayerMovementController : MonoBehaviour {
             }
         }
 
-        if (other.gameObject.tag == "BTN_START_POINT_AND_DOOR") {
+        if ( other.gameObject.tag == "BTN_START_POINT_AND_DOOR" ) {
             gp.isInBtnStartPointAndDoor = true;
-        } else if (other.gameObject.tag == "BTN_DOOR_AND_JUNCTION") {
+        } else if ( other.gameObject.tag == "BTN_DOOR_AND_JUNCTION" ) {
             gp.isInBtnDoorAndJunction = true;
-        } else if (other.gameObject.tag == "BTN_JUNCTION_AND_MEDICINE") {
+        } else if ( other.gameObject.tag == "BTN_JUNCTION_AND_MEDICINE" ) {
             gp.isInBtnJunctionAndMedicine = true;
         }
     }
@@ -721,32 +721,12 @@ public class PlayerMovementController : MonoBehaviour {
         isPlayerMovementAllowed = true;
     }
 
-    void writeTest(string p, string fileName) {
-        // Write sample data to CSV file
-        char[] delimiterChars = { '\n' };
-
-        using (CsvFileWriter writer = new CsvFileWriter(fileName)) {
-            string[] allRows = p.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string rowData in allRows) {
-                delimiterChars[0] = ',';
-                string[] allCol = rowData.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-                CsvRow row = new CsvRow();
-                foreach (string colData in allCol) {
-                    row.Add(colData);
-                }
-
-                writer.WriteRow(row);
-            }
-
-        }
-    }
-
     void phoneRing() {
-        if (isPhoneRingNeeded) {
+        if ( isPhoneRingNeeded ) {
             isPhoneRingNeeded = false;
             //rign the phone.
-            UnityEngine.AudioSource phoneRing = (UnityEngine.AudioSource)phonebooth.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
-            if (!phoneRing.isPlaying) {
+            UnityEngine.AudioSource phoneRing = ( UnityEngine.AudioSource ) phonebooth.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
+            if ( !phoneRing.isPlaying ) {
                 phoneRing.loop = true;
                 phoneRing.Play();
             }
@@ -754,31 +734,31 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     void doorBellRing() {
-        UnityEngine.AudioSource doorBell = (UnityEngine.AudioSource)outsideDoorBell.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
+        UnityEngine.AudioSource doorBell = ( UnityEngine.AudioSource ) outsideDoorBell.GetComponent<UnityEngine.AudioSource>() as UnityEngine.AudioSource;
         doorBell.PlayOneShot(doorBell.clip);
     }
 
     void OnTriggerExit(Collider other) {
-        if (other.gameObject.tag == "BELL_OR_PHONE_RING") {
+        if ( other.gameObject.tag == "BELL_OR_PHONE_RING" ) {
             junctionEmptObject.SetActive(false);
         }
-        if (other.gameObject.tag == "DOOR_CLOSE_POSITION_OUTSIDE") {
+        if ( other.gameObject.tag == "DOOR_CLOSE_POSITION_OUTSIDE" ) {
             //Debug.Log ( "Time to Close Outside Door!" );
-            ndc = (NewDoorController)other.gameObject.GetComponentInParent<NewDoorController>() as NewDoorController;
-            if (ndc.isDoorOpen)
+            ndc = ( NewDoorController ) other.gameObject.GetComponentInParent<NewDoorController>() as NewDoorController;
+            if ( ndc.isDoorOpen )
                 ndc.controllDoor("DoorCloseT", true);
-        } else if (other.gameObject.tag == "DOOR_CLOSE_POSITION_INSIDE") {
+        } else if ( other.gameObject.tag == "DOOR_CLOSE_POSITION_INSIDE" ) {
             //Debug.Log ( "Time to Close Inside Door!" );
-            ndc = (NewDoorController)other.gameObject.GetComponentInParent<NewDoorController>() as NewDoorController;
-            if (ndc.isDoorOpen)
+            ndc = ( NewDoorController ) other.gameObject.GetComponentInParent<NewDoorController>() as NewDoorController;
+            if ( ndc.isDoorOpen )
                 ndc.controllDoor("DoorCloseT", true);
         }
 
-        if (other.gameObject.tag == "BTN_START_POINT_AND_DOOR") {
+        if ( other.gameObject.tag == "BTN_START_POINT_AND_DOOR" ) {
             gp.isInBtnStartPointAndDoor = false;
-        } else if (other.gameObject.tag == "BTN_DOOR_AND_JUNCTION") {
+        } else if ( other.gameObject.tag == "BTN_DOOR_AND_JUNCTION" ) {
             gp.isInBtnDoorAndJunction = false;
-        } else if (other.gameObject.tag == "BTN_JUNCTION_AND_MEDICINE") {
+        } else if ( other.gameObject.tag == "BTN_JUNCTION_AND_MEDICINE" ) {
             gp.isInBtnJunctionAndMedicine = false;
         }
 
@@ -792,20 +772,46 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     void OnApplicationQuit() {
-        if (bodyFrameReader != null) {
+        if ( bodyFrameReader != null ) {
             bodyFrameReader.Dispose();
             bodyFrameReader = null;
         }
 
-        if (kinectSensor != null) {
-            if (kinectSensor.IsOpen) {
+        if ( kinectSensor != null ) {
+            if ( kinectSensor.IsOpen ) {
                 kinectSensor.Close();
             }
             kinectSensor = null;
         }
 
-        writeTest(logData, "Data\\Log.csv");
-        writeTest(turnData, "Data\\turnData.csv");
+        UtilitiesScript.writeTest(logData, "Data\\Log.csv");
+        UtilitiesScript.writeTest(turnData, "Data\\turnData.csv");
 
     }
+
+    /*
+    public void writeTest(string p, string fileName)
+    {
+        // Write sample data to CSV file
+        char[] delimiterChars = { '\n' };
+
+        using (CsvFileWriter writer = new CsvFileWriter(fileName))
+        {
+            string[] allRows = p.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string rowData in allRows)
+            {
+                delimiterChars[0] = ',';
+                string[] allCol = rowData.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
+                CsvRow row = new CsvRow();
+                foreach (string colData in allCol)
+                {
+                    row.Add(colData);
+                }
+
+                writer.WriteRow(row);
+            }
+
+        }
+    }
+    */
 }
