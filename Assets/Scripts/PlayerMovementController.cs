@@ -358,7 +358,7 @@ public class PlayerMovementController : MonoBehaviour {
                            ", gravX = " + ( gravXC / gravCalibrationCX ) +
                            ", gravY = " + ( gravYC / gravCalibrationCX ) + "\n";
                 //Debug.Log("Writing Caldata!");
-                UtilitiesScript.writeTest(calData, "Data\\calData.csv");
+                UtilitiesScript.writeTest(calData, "Data\\calData.csv", true);
             }
             //}
         }
@@ -649,15 +649,15 @@ public class PlayerMovementController : MonoBehaviour {
                 //GAME OVER!
                 Debug.Log("GAME OVER!");
                 gp.setIsGameOver(true);
-                UtilitiesScript.writeTest(resultData, "Data\\ResultDataGameOver.csv");
+                UtilitiesScript.writeTest(resultData, "Data\\ResultDataGameOver.csv", true);
             } else if ( ( gp.currentRunNumber == 0 && gp.isAllTaskDone() ) ||
                   ( gp.currentRunNumber > 0 && gp.isAllTaskDone() && gp.currentRunNumber < GamePlayScript.NUMBER_OF_RUN ) ) {
 
                 //write the current data and then initialize the game for next run                               
                 resultData += gp.currentRunNumber + "," + gp.timeToCrossFirst3M[gp.currentRunNumber] + "," + gp.timeToCrossSecond3M[gp.currentRunNumber] + "," + gp.timeToCrossThird3M[gp.currentRunNumber] + "\n";
-                UtilitiesScript.writeTest(resultData, "Data\\ResultData.csv");
+                UtilitiesScript.writeTest(resultData, "Data\\ResultData.csv", true);
 
-                UtilitiesScript.writeTest(logData, "Data\\Log.csv");
+                UtilitiesScript.writeTest(logData, "Data\\Log.csv", true);
                 initializeGame();
             }
 
@@ -784,8 +784,8 @@ public class PlayerMovementController : MonoBehaviour {
             kinectSensor = null;
         }
 
-        UtilitiesScript.writeTest(logData, "Data\\Log.csv");
-        UtilitiesScript.writeTest(turnData, "Data\\turnData.csv");
+        UtilitiesScript.writeTest(logData, "Data\\Log.csv", true);
+        UtilitiesScript.writeTest(turnData, "Data\\turnData.csv", true);
 
     }
 

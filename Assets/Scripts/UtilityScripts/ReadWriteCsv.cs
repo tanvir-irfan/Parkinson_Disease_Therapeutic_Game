@@ -26,6 +26,10 @@ namespace ReadWriteCsv {
             : base ( filename ) {
         }
 
+        public CsvFileWriter(string filename, bool isAppendMode)
+            : base(filename, isAppendMode) {
+        }
+
         /// <summary>
         /// Writes a single row to a CSV file.
         /// </summary>
