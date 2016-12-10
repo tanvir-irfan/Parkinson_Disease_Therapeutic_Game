@@ -45,8 +45,8 @@ public class UtilitiesScript {
         }
     }
 
-    public static Dictionary<String, int> readConfigurationFile() {
-        Dictionary<String, int> conf = new Dictionary<string, int>();
+    public static Dictionary<String, double> readConfigurationFile() {
+        Dictionary<String, double> conf = new Dictionary<string, double>();
         //String conf_Path = "C:\\Users\\SAVE_UTSA\\Desktop\\Tanvir\\LimbTest_Beta\\_build\\configuration_file.txt";
         String conf_Path = "configuration_file.txt";
 
@@ -62,27 +62,18 @@ public class UtilitiesScript {
                 //Debug.Log ( line );
                 if ( line != null && line.Contains(delim.ToString()) && !line.Contains("#") ) {
                     String[] singleConf = line.Split(delim);
-                    conf.Add(singleConf[0], Convert.ToInt32(singleConf[1]));
+                    conf.Add(singleConf[0], Convert.ToDouble(singleConf[1]));
                 }
             }
-        }
-        /*
-        conf.TryGetValue("POS_BELOW_MAX_REACH", out POS_BELOW_MAX_REACH);
-        conf.TryGetValue("POS_ABOVE_MAX_REACH", out POS_ABOVE_MAX_REACH);
-        conf.TryGetValue("NUMBER_OF_TRIAL_PER_POSITION", out NUMBER_OF_TRIAL_PER_POSITION);
-        conf.TryGetValue("REMAINING_TIME_TO_TOUCH_TARGET", out REMAINING_TIME_TO_TOUCH_TARGET);
-        conf.TryGetValue("NEXT_TRIAL_START_TIME", out NEXT_TRIAL_START_TIME);
-        conf.TryGetValue("LOWER_RANGE", out LOWER_RANGE);
-        conf.TryGetValue("HIGHER_RANGE", out HIGHER_RANGE);
-        */
+        }        
         return conf;
     }
 
-    public static float clampAngle(float angle, float min, float max) {
+    public static float clampAngle(double angle, float min, float max) {
         if ( angle < -360F )
             angle += 360F;
         if ( angle > 360F )
             angle -= 360F;
-        return Mathf.Clamp(angle, min, max);
+        return Mathf.Clamp((float)angle, min, max);
     }
 }

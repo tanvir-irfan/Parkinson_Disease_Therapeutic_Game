@@ -24,19 +24,11 @@ public class PlayerMovementController : MonoBehaviour {
     string ipUIVAServer = "localhost";
 
     private double[] LEFT_WRIST_POS = new double[3];
-    private double[] quat_Joint1 = new double[4];
     private double[] RIGHT_WRIST_POS = new double[3];
-    private double[] quat_Joint2 = new double[4];
-
     private double[] LEFT_FOOT_POS = new double[3];
-    private double[] quat_Joint3 = new double[4];
     private double[] RIGHT_FOOT_POS = new double[3];
-    private double[] quat_Joint4 = new double[4];
-
     private double[] SPINE_SHOLDER_POS = new double[3];
 
-    private double pitch = 0.0, roll = 0.0;
-    private string butt = "";
     private double gravX = 0.0, gravY = 0.0, weight = 0.0;
     private string fitbutt = "";
 
@@ -46,13 +38,12 @@ public class PlayerMovementController : MonoBehaviour {
     private double gravCalibrationTh = 0.05;
     private double gravCalibrationCX = 1, gravCalibrationCY = 1;
     private double gravMovementTh = 10;
-    private double footMovementTh = 0.10;
 
     //	WiiFit board Control
     private double topL = 0.0, topR = 0.0, bottomL = 0.0, bottomR = 0.0;
     private double topLC = 0.0, topRC = 0.0, bottomLC = 0.0, bottomRC = 0.0;
     private double calibrationCounterTL = 0, calibrationCounterTR = 0, calibrationCounterBL = 0, calibrationCounterBR = 0;
-    
+
     public bool isCalibrationStarted = false;
     public bool isCalibrationDone = false;
     public bool isKeyboardControlled = false;
@@ -75,18 +66,9 @@ public class PlayerMovementController : MonoBehaviour {
     private bool walkOnRightF = true;
 
     // Game Controller
-    private int objectCounter = 0;
-    private static float WALK_DURATION = 25f;
-    private float walkTime = WALK_DURATION;
+
+    private double walkTime;
     private bool walkTimerStarted = false;
-
-    private static float TURN_DURATION = 10f;
-    private float turnTime = TURN_DURATION;
-    private bool turnTimerStarted = false;
-
-    //private static float MOVE_LEFT_OR_RIGHT_DURATION = 30f;
-    //private float moveLeftOrRightTime = MOVE_LEFT_OR_RIGHT_DURATION;
-    //private bool moveLeftOrRightTimerStarted = false;
 
     public GamePlayScript gp;
 
@@ -101,8 +83,11 @@ public class PlayerMovementController : MonoBehaviour {
     public bool left;
     public bool right;
 
-    float rotationX = 0F;
-    float rotationY = 0F;
+    double rotationX = 0F;
+    double rotationY = 0F;
+
+    float leanX = 0.0f;
+    float leanY = 0.0f;
 
 
     // Phone Controller
@@ -110,6 +95,9 @@ public class PlayerMovementController : MonoBehaviour {
     public GameObject[] medicinePack = new GameObject[4];
     public GameObject[] blockWall = new GameObject[3];//0 = phone, 1 = medecine, 2 = door
     private string[] medColor = { "MEDICINE_RED", "MEDICINE_YELLOW", "MEDICINE_PINK", "MEDICINE_BLUE" };
+    // Assign value in the inspector. These are the colors of the medicine
+    public Texture2D[] textureToUse = new Texture2D[4];
+
     bool isPhonePicked = false;
     bool isPhoneRingNeeded = true;	// phone will ring only when player approaching to the junction
     // phone will stop ringing when player picked up the phone first time
@@ -136,6 +124,9 @@ public class PlayerMovementController : MonoBehaviour {
     public UnityEngine.AudioClip[] instructionClip = new UnityEngine.AudioClip[2];
 
     public Camera cam;
+
+
+    private int calibrationDataWriteCounter = 0;
 
     public void setKinectControlled(bool isKinCont) {
         isKeyboardControlled = !isKinCont;
@@ -168,7 +159,7 @@ public class PlayerMovementController : MonoBehaviour {
         if ( GetComponent<Rigidbody>() )
             GetComponent<Rigidbody>().freezeRotation = true;
         originalRotation = transform.localRotation;
-        
+
         /*try {
             theClient = new UIVA_Client(ipUIVAServer);
         } catch (Exception ex) {
@@ -193,16 +184,15 @@ public class PlayerMovementController : MonoBehaviour {
         //################################ NEW KINECT CODE ##########################        
 
         gp = new GamePlayScript();
+        walkTime = Configuration.WALK_DURATION;
+
         initializeGame();
 
     }
 
     //private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e) {
-        //Debug.Log ( "Reader_FrameArrived" );
-    //}
-
-    // Assign value in the inspector. These are the color of the medicine
-    public Texture2D[] textureToUse = new Texture2D[4];
+    //Debug.Log ( "Reader_FrameArrived" );
+    //}    
 
     void initializeGame() {
 
@@ -261,9 +251,9 @@ public class PlayerMovementController : MonoBehaviour {
 
         packageReady = false;
     }
-    
+
     // Update is called once per frame    
-    void Update() {        
+    void Update() {
 
         /*if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
             Debug.Log("SHIFT");
@@ -271,6 +261,7 @@ public class PlayerMovementController : MonoBehaviour {
                 Debug.Log("SHIFT + S");
         }*/
 
+        #region KEYBOARD INPUT HANDLING REGION
         if ( Input.GetKeyDown(KeyCode.Space) ) {
 
             if ( !reachForObject ) {
@@ -293,7 +284,8 @@ public class PlayerMovementController : MonoBehaviour {
                     g.SetActive(true);
                 Invoke("hideDeliveredPackate", 3);
             }
-        }        
+        }
+        #endregion
 
         // counter to end the animation for walking and turning.
         if ( walkTimerStarted ) {
@@ -302,12 +294,6 @@ public class PlayerMovementController : MonoBehaviour {
                 walkTimerEnded();
             }
         }
-        if ( turnTimerStarted ) {
-            turnTime -= 1;
-            if ( turnTime <= 0.0f ) {
-                turnTimerEnded();
-            }
-        }        
 
     }
 
@@ -342,8 +328,8 @@ public class PlayerMovementController : MonoBehaviour {
             string calData = "";
             //if (isCalibrationDone) {
             controllPlayer();		//3
-            if ( count < 2 ) {
-                count++;
+            if ( calibrationDataWriteCounter < 2 ) {
+                calibrationDataWriteCounter++;
                 calData += "wristCounter = " + wristCounter +
                            " leftWristC = " + ( leftWristC / wristCounter ) +
                            ", rightWristC = " + ( rightWristC / wristCounter ) +
@@ -365,8 +351,6 @@ public class PlayerMovementController : MonoBehaviour {
             gp.timeToCrossThird3M[gp.currentRunNumber] += Time.deltaTime;
         }
     }
-
-    private int count = 0;
 
     private void getWiiAndKinectData() {
         if ( theClient != null ) {
@@ -391,6 +375,7 @@ public class PlayerMovementController : MonoBehaviour {
                 frame.Dispose();
                 frame = null;
 
+                // May be this needs fixing, I need to tell kinect not to "track" other bodies.
                 int idx = -1;
                 for ( int i = 0; i < kinectSensor.BodyFrameSource.BodyCount; i++ ) {
                     if ( bodies[i].IsTracked ) {
@@ -428,9 +413,6 @@ public class PlayerMovementController : MonoBehaviour {
             }
         }
     }
-
-    float leanX = 0.0f;
-    float leanY = 0.0f;
 
     public void calibrateData() {
         if ( isCalibrationStarted ) {
@@ -478,14 +460,14 @@ public class PlayerMovementController : MonoBehaviour {
     public void turnPlayer() {
         //tanvir.irfan TURN
         if ( left )
-            rotationX += -1;
+            rotationX += -1 * ( Configuration.TURN_ANGLE / 10 );
         else if ( right )
-            rotationX += 1;
+            rotationX += ( Configuration.TURN_ANGLE / 10 );
         else
             //rotationX += Input.GetAxis("Horizontal");
             rotationX = UtilitiesScript.clampAngle(rotationX, minimumX, maximumX);
 
-        Quaternion xQuaternion = Quaternion.AngleAxis(rotationX, Vector3.up);
+        Quaternion xQuaternion = Quaternion.AngleAxis(( float ) rotationX, Vector3.up);
         transform.localRotation = originalRotation * xQuaternion;
     }
 
@@ -500,21 +482,21 @@ public class PlayerMovementController : MonoBehaviour {
         float leftFootDisplacement = ( float ) ( leftFoot - rightFoot );
         float rightFootDisplacement = ( float ) ( rightFoot - leftFoot );
 
-        if ( leftFootDisplacement >= footMovementTh ) {
+        double ftTh = Configuration.FOOT_MOVEMENT_THRESHOLD / 10;
+        //Debug.Log("ftTh = " + ftTh);
+        if ( leftFootDisplacement >= ftTh ) {
             if ( walkOnLeftF && !walkTimerStarted ) {
                 walk = true;
                 walkOnLeftF = false;
                 walkOnRightF = true;
                 walkTimerStarted = true;
-                //Debug.Log ( "TIMER : START" );
             }
-        } else if ( rightFootDisplacement >= footMovementTh ) {
+        } else if ( rightFootDisplacement >= ftTh ) {
             if ( walkOnRightF && !walkTimerStarted ) {
                 walk = true;
                 walkOnRightF = false;
                 walkOnLeftF = true;
                 walkTimerStarted = true;
-                //Debug.Log ( "TIMER : START" );
             }
         } else {
             walk = false;
@@ -522,11 +504,16 @@ public class PlayerMovementController : MonoBehaviour {
 
         if ( walk ) {
             moveV = 1.0f;
+            moveH = 0;
+            return;
         } else {
             /*##########################    WALK BACKWARD  KKKKKKKKKKKKKKKKKKKKKKKK  ##################################*/
-            if ( Math.Abs(leanY) >= 0.5 ) {
+            //Debug.Log("Lean Back = " + Configuration.LEAN_BACK_THRESHOLD / 10);
+            if ( Math.Abs(leanY) >= ( Configuration.LEAN_BACK_THRESHOLD / 10 ) ) {
                 moveV = -1;
                 walkBackward = true;
+                moveH = 0;
+                return;
             } else {
                 moveV = 0.0f;
                 walkBackward = false;
@@ -535,8 +522,8 @@ public class PlayerMovementController : MonoBehaviour {
 
 
         /*##########################    HAND MOVEMENT  ##################################*/
-        float handForward = 0.4f;
-
+        float handForward = ( float ) Configuration.HAND_FORWARD_THRESHOLD / 10;
+        //Debug.Log("handForward = " + handForward);
         if ( !walkBackward && ( SPINE_SHOLDER_POS[2] - LEFT_WRIST_POS[2] >= handForward ) ) {
             reachForObject = true;
             grabL = true;
@@ -561,25 +548,27 @@ public class PlayerMovementController : MonoBehaviour {
             Invoke("hideDeliveredPackate", 3);
         }
 
-        
-        float handSideWise = 0.4f;
-        
-        if ( !walkBackward && Math.Abs( LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
+
+        float handSideWise = ( float ) Configuration.HAND_SIDEWISE_THRESHOLD / 10;
+        //Debug.Log("handSideWise = " + handSideWise);
+
+        if ( !walkBackward && Math.Abs(LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0]) >= handSideWise ) {
             isMovingSideWise = true;
             moveLeftRight = 1;
             //moveLeftOrRightTimerStarted = true;
-        } else if ( !walkBackward && Math.Abs( RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
+        } else if ( !walkBackward && Math.Abs(RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0]) >= handSideWise ) {
             isMovingSideWise = true;
             moveLeftRight = -1;
             //moveLeftOrRightTimerStarted = true;
         } else {
             isMovingSideWise = false;
             moveLeftRight = 0;
-        }        
+        }
 
         /*##########################    TURN    ##################################*/
-        if ( Math.Abs(leanX) >= 0.5 ) {
-            if ( leanX > 0 )  right = true;
+        //Debug.Log("Turn = " + Configuration.TURN_LEAN_THRESHOLD / 10);
+        if ( Math.Abs(leanX) >= Configuration.TURN_LEAN_THRESHOLD / 10 ) {
+            if ( leanX > 0 ) right = true;
             else left = true;
 
             moveH = 1;
@@ -596,15 +585,8 @@ public class PlayerMovementController : MonoBehaviour {
         walkTimerStarted = false;
         walk = false;
         //Debug.Log ( "TIMER : ENDED" );
-        walkTime = WALK_DURATION;
+        walkTime = Configuration.WALK_DURATION;
         gp.numberOfSteps[gp.currentRunNumber]++;
-    }
-
-    void turnTimerEnded() {
-        turnTimerStarted = false;
-        turn = false;
-        //Debug.Log ( "TIMER : ENDED" );
-        turnTime = WALK_DURATION;
     }
 
     void OnTriggerEnter(Collider other) {
@@ -788,7 +770,7 @@ public class PlayerMovementController : MonoBehaviour {
             kinectSensor = null;
         }
 
-        UtilitiesScript.writeTest(logData, "Data\\Log.csv", true);        
+        UtilitiesScript.writeTest(logData, "Data\\Log.csv", true);
 
     }
 
