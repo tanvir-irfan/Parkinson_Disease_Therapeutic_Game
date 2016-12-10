@@ -11,7 +11,7 @@ public class CalibrationController : MonoBehaviour {
     bool isGamePaused = false;
     AudioSource instAudioSource;
 
-    public const float CALIBRATION_TIME = 2.0f;
+    public double CALIBRATION_TIME;// = Configuration.CALIBRATION_TIME;
 
     public void Start() {
         calScreenPanel.SetActive(false);
@@ -24,6 +24,8 @@ public class CalibrationController : MonoBehaviour {
         pauseB.SetActive(false);
         goodByePanel.SetActive(false);
         pmc = ( PlayerMovementController ) player.GetComponent("PlayerMovementController");
+
+        CALIBRATION_TIME = Configuration.CALIBRATION_TIME;
         instAudioSource = ( AudioSource ) this.GetComponent<AudioSource>();
         //Debug.Log("instAudioSource = " + instAudioSource);
 
@@ -51,7 +53,7 @@ public class CalibrationController : MonoBehaviour {
 
         //tanvirirfan.utsa mew code
         calDoneB.SetActive(false);
-        StartCoroutine(onCalibtaionDone(CALIBRATION_TIME));
+        StartCoroutine(onCalibtaionDone((float)CALIBRATION_TIME));
     }
 
     public IEnumerator onCalibtaionDone(float waitTime) {
@@ -63,7 +65,7 @@ public class CalibrationController : MonoBehaviour {
 
         pmc.isCalibrationDone = true;
         pmc.calibrationDoneTime = Time.time;
-        pmc.isCalibrationStarted = false;   // I do not want the calibration to go on after Done button is pressed!
+        //pmc.isCalibrationStarted = false;   // I do not want the calibration to go on after Done button is pressed!
 
         pmc.isPlayerMovementAllowed = true;
         pauseB.SetActive(true);

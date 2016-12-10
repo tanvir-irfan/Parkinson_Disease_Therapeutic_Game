@@ -62,7 +62,7 @@ public class PlayerMovementController : MonoBehaviour {
     private double rightFootC = 0, leftFootC = 0;
     private double footCounter = 0;
 
-    private bool walkOnLeftF = true;
+    private bool walkOnLeftF = false;
     private bool walkOnRightF = true;
 
     // Game Controller
@@ -126,7 +126,7 @@ public class PlayerMovementController : MonoBehaviour {
     public Camera cam;
 
 
-    private int calibrationDataWriteCounter = 0;
+    private int calibrationDataWriteCounter = 1;
 
     public void setKinectControlled(bool isKinCont) {
         isKeyboardControlled = !isKinCont;
@@ -318,6 +318,10 @@ public class PlayerMovementController : MonoBehaviour {
             // 2. if calibration stage, calibrate data
             // 3. when in game mode, use wii and kinect data to control the avatar
 
+
+            if ( !isCalibrationStarted && !isCalibrationDone ) {
+                return;
+            }
             getWiiAndKinectData();    //1
             //isCalibrationDone = true;
             if ( isCalibrationStarted && !isCalibrationDone ) {
@@ -325,18 +329,26 @@ public class PlayerMovementController : MonoBehaviour {
                 return;
             }
 
+
+            //Debug.Log("NEW [ L, R ] = [" + leftFootC + ", " + rightFootC + " ]" + " footCounter = " + footCounter);
             string calData = "";
             //if (isCalibrationDone) {
             controllPlayer();		//3
             if ( calibrationDataWriteCounter < 2 ) {
                 calibrationDataWriteCounter++;
+
                 calData += "wristCounter = " + wristCounter +
-                           " leftWristC = " + ( leftWristC / wristCounter ) +
-                           ", rightWristC = " + ( rightWristC / wristCounter ) +
-                           ", leftFootC = " + ( leftFootC / footCounter ) +
-                           ", rightWristC = " + ( rightWristC / wristCounter ) +
-                           ", gravX = " + ( gravXC / gravCalibrationCX ) +
-                           ", gravY = " + ( gravYC / gravCalibrationCX ) + "\n";
+                          ", leftWristC = " + ( leftWristC / wristCounter ) +
+                          ", rightWristC = " + ( rightWristC / wristCounter ) +
+                          ", leftFootC = " + ( leftFootC / footCounter ) +
+                          ", rightFootC = " + ( rightFootC / footCounter ) +
+                          ", gravX = " + ( gravXC / gravCalibrationCX ) +
+                          ", gravY = " + ( gravYC / gravCalibrationCX ) + "\n";
+
+
+                //calData += "leftFootC = " + ( leftFootC ) + ",";
+                //calData += "rightFootC = " + ( rightFootC ) + ",";
+                //calData += "footCounter = " + ( footCounter ) + "\n";
                 //Debug.Log("Writing Caldata!");
                 UtilitiesScript.writeTest(calData, "Data\\calData.csv", true);
             }
@@ -415,25 +427,26 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     public void calibrateData() {
-        if ( isCalibrationStarted ) {
-            //Debug.Log ( "isCalibrationStarted = " + isCalibrationStarted );
-            //if ( gravX > gravCalibrationTh ) {
-            gravCalibrationCX = gravCalibrationCX + 1;
-            gravXC = ( gravXC + gravX );
-            //}
-            //if ( gravY > gravCalibrationTh ) {
-            gravCalibrationCY = gravCalibrationCY + 1;
-            gravYC = ( gravYC + gravY );
-            //}
+        //Debug.Log("isCalibrationStarted = " + isCalibrationStarted);
+        //if ( gravX > gravCalibrationTh ) {
+        gravCalibrationCX = gravCalibrationCX + 1;
+        gravXC = ( gravXC + gravX );
+        //}
+        //if ( gravY > gravCalibrationTh ) {
+        gravCalibrationCY = gravCalibrationCY + 1;
+        gravYC = ( gravYC + gravY );
+        //}
 
-            leftWristC = LEFT_WRIST_POS[2] + leftWristC;
-            rightWristC = RIGHT_WRIST_POS[2] + rightWristC;
-            wristCounter = wristCounter + 1;
+        leftWristC = LEFT_WRIST_POS[2] + leftWristC;
+        rightWristC = RIGHT_WRIST_POS[2] + rightWristC;
+        wristCounter = wristCounter + 1;
 
-            leftFootC = LEFT_FOOT_POS[1] + leftFootC;
-            rightFootC = RIGHT_FOOT_POS[1] + rightFootC;
-            footCounter = footCounter + 1;
-        }
+        leftFootC = LEFT_FOOT_POS[1] + leftFootC;
+        rightFootC = RIGHT_FOOT_POS[1] + rightFootC;
+        footCounter++;
+
+        //Debug.Log("[ L, R ] = [" + leftFootC/footCounter + ", " + rightFootC/footCounter + " ]" + " footCounter = " + footCounter);
+
     }
 
     public void controllPlayer() {
@@ -443,7 +456,7 @@ public class PlayerMovementController : MonoBehaviour {
             return;
         }
         //Debug.Log("controllPlayer");
-        setMoveParameter(LEFT_FOOT_POS[1], RIGHT_FOOT_POS[1], out moveV, out moveH);
+        setMoveParameter(LEFT_FOOT_POS[1], RIGHT_FOOT_POS[1], out moveV);
 
         animator.SetFloat("Walk", moveV);
         animator.SetBool("WalkBack", walkBackward);
@@ -471,7 +484,7 @@ public class PlayerMovementController : MonoBehaviour {
         transform.localRotation = originalRotation * xQuaternion;
     }
 
-    public void setMoveParameter(double leftFoot, double rightFoot, out float moveV, out float moveH) {
+    public void setMoveParameter(double leftFoot, double rightFoot, out float moveV) {
 
         /*##########################    WALK    ##################################*/
 
@@ -479,32 +492,51 @@ public class PlayerMovementController : MonoBehaviour {
         rightFoot = Math.Abs(rightFoot);
 
 
-        float leftFootDisplacement = ( float ) ( leftFoot - rightFoot );
-        float rightFootDisplacement = ( float ) ( rightFoot - leftFoot );
+        //float leftFootDisplacement = ( float ) ( leftFoot - rightFoot );
+        //float rightFootDisplacement = ( float ) ( rightFoot - leftFoot );
+
+        float leftFootDisplacement = ( float ) Math.Abs(leftFoot - ( leftFootC / footCounter ));
+        float rightFootDisplacement = ( float ) Math.Abs(rightFoot - ( rightFootC / footCounter ));
 
         double ftTh = Configuration.FOOT_MOVEMENT_THRESHOLD / 10;
         //Debug.Log("ftTh = " + ftTh);
-        if ( leftFootDisplacement >= ftTh ) {
-            if ( walkOnLeftF && !walkTimerStarted ) {
+        /*
+        if ( !walkTimerStarted && leftFootDisplacement >= ftTh ) {
+            if ( walkOnLeftF ) {
                 walk = true;
-                walkOnLeftF = false;
-                walkOnRightF = true;
+                //walkOnLeftF = false;
+                //walkOnRightF = true;
                 walkTimerStarted = true;
-            }
-        } else if ( rightFootDisplacement >= ftTh ) {
-            if ( walkOnRightF && !walkTimerStarted ) {
-                walk = true;
-                walkOnRightF = false;
+
                 walkOnLeftF = true;
-                walkTimerStarted = true;
             }
-        } else {
-            walk = false;
+        } else if ( !walkTimerStarted && rightFootDisplacement >= ftTh ) {
+            if ( walkOnRightF ) {
+                walk = true;
+                //walkOnRightF = false;
+                //walkOnLeftF = true;
+                walkTimerStarted = true;
+
+                walkOnRightF = true;
+            }
+        } //else {
+        //    walk = false;
+        //}
+        */
+
+        //Debug.Log("[LD, RD] = [ " + leftFootDisplacement + ", " + rightFootDisplacement + "]");
+        if ( !walk && !walkTimerStarted && leftFootDisplacement >= ftTh ) {
+            //Debug.Log("walkTimerStarted : leftFootDisplacement = " + leftFootDisplacement);
+            walk = true;
+            walkTimerStarted = true;
+        } else if ( !walk && !walkTimerStarted && rightFootDisplacement >= ftTh ) {
+            //Debug.Log("walkTimerStarted : rightFootDisplacement = " + rightFootDisplacement);
+            walk = true;
+            walkTimerStarted = true;
         }
 
         if ( walk ) {
             moveV = 1.0f;
-            moveH = 0;
             return;
         } else {
             /*##########################    WALK BACKWARD  KKKKKKKKKKKKKKKKKKKKKKKK  ##################################*/
@@ -512,7 +544,6 @@ public class PlayerMovementController : MonoBehaviour {
             if ( Math.Abs(leanY) >= ( Configuration.LEAN_BACK_THRESHOLD / 10 ) ) {
                 moveV = -1;
                 walkBackward = true;
-                moveH = 0;
                 return;
             } else {
                 moveV = 0.0f;
@@ -520,7 +551,7 @@ public class PlayerMovementController : MonoBehaviour {
             }
         }
 
-
+        #region HAND MOVEMENT
         /*##########################    HAND MOVEMENT  ##################################*/
         float handForward = ( float ) Configuration.HAND_FORWARD_THRESHOLD / 10;
         //Debug.Log("handForward = " + handForward);
@@ -565,18 +596,20 @@ public class PlayerMovementController : MonoBehaviour {
             moveLeftRight = 0;
         }
 
+        #endregion
+
         /*##########################    TURN    ##################################*/
         //Debug.Log("Turn = " + Configuration.TURN_LEAN_THRESHOLD / 10);
         if ( Math.Abs(leanX) >= Configuration.TURN_LEAN_THRESHOLD / 10 ) {
             if ( leanX > 0 ) right = true;
             else left = true;
 
-            moveH = 1;
+            //moveH = 1;
         } else {
             left = false;
             right = false;
 
-            moveH = 0;
+            //moveH = 0;
         }
 
     }
@@ -584,6 +617,13 @@ public class PlayerMovementController : MonoBehaviour {
     void walkTimerEnded() {
         walkTimerStarted = false;
         walk = false;
+        if ( walkOnLeftF ) {
+            walkOnLeftF = false;
+            walkOnRightF = true;
+        } else if ( walkOnRightF ) {
+            walkOnRightF = false;
+            walkOnLeftF = true;
+        }
         //Debug.Log ( "TIMER : ENDED" );
         walkTime = Configuration.WALK_DURATION;
         gp.numberOfSteps[gp.currentRunNumber]++;

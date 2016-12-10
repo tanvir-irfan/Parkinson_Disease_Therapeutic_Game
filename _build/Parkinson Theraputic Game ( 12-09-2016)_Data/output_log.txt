@@ -2,13 +2,13 @@ Mono path[0] = 'D:/UTSA_STUDY/_Projects/Parkinson_Disease_Therapeutic_Game/_buil
 Mono path[1] = 'D:/UTSA_STUDY/_Projects/Parkinson_Disease_Therapeutic_Game/_build/Parkinson Theraputic Game ( 12-09-2016)_Data/Mono'
 Mono config path = 'D:/UTSA_STUDY/_Projects/Parkinson_Disease_Therapeutic_Game/_build/Parkinson Theraputic Game ( 12-09-2016)_Data/Mono/etc'
 PlayerConnection initialized from D:/UTSA_STUDY/_Projects/Parkinson_Disease_Therapeutic_Game/_build/Parkinson Theraputic Game ( 12-09-2016)_Data (debug = 0)
-PlayerConnection initialized network socket : 0.0.0.0 55112
-Multi-casting "[IP] 192.168.0.109 [Port] 55112 [Flags] 3 [Guid] 552255938 [EditorId] 134582633 [Version] 1048832 [Id] WindowsPlayer(Tanvir-Irfan-Chowdhury) [Debug] 1" to [225.0.0.222:54997]...
-Waiting for connection from host on [0.0.0.0:55112]...
+PlayerConnection initialized network socket : 0.0.0.0 55349
+Multi-casting "[IP] 192.168.0.109 [Port] 55349 [Flags] 3 [Guid] 506057810 [EditorId] 286812970 [Version] 1048832 [Id] WindowsPlayer(Tanvir-Irfan-Chowdhury) [Debug] 1" to [225.0.0.222:54997]...
+Waiting for connection from host on [0.0.0.0:55349]...
 PlayerConnection accepted from [192.168.0.109] handle:0x300
-Started listening to [0.0.0.0:55112]
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56938
-PlayerConnection already initialized - listening to [0.0.0.0:55112]
+Started listening to [0.0.0.0:55349]
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,defer=y,address=0.0.0.0:56810
+PlayerConnection already initialized - listening to [0.0.0.0:55349]
 Initialize engine version: 5.5.0f3 (38b4efef76f0)
 GfxDevice: creating device client; threaded=1
 Direct3D:
@@ -34,23 +34,32 @@ Platform assembly: D:\UTSA_STUDY\_Projects\Parkinson_Disease_Therapeutic_Game\_b
 Loading D:\UTSA_STUDY\_Projects\Parkinson_Disease_Therapeutic_Game\_build\Parkinson Theraputic Game ( 12-09-2016)_Data\Managed\UnityEngine.Networking.dll into Unity Child Domain
 Platform assembly: D:\UTSA_STUDY\_Projects\Parkinson_Disease_Therapeutic_Game\_build\Parkinson Theraputic Game ( 12-09-2016)_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll (this message is harmless)
 Loading D:\UTSA_STUDY\_Projects\Parkinson_Disease_Therapeutic_Game\_build\Parkinson Theraputic Game ( 12-09-2016)_Data\Managed\UnityEngine.PlaymodeTestsRunner.dll into Unity Child Domain
-- Completed reload, in  0.288 seconds
+- Completed reload, in  0.041 seconds
 Platform assembly: D:\UTSA_STUDY\_Projects\Parkinson_Disease_Therapeutic_Game\_build\Parkinson Theraputic Game ( 12-09-2016)_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: D:\UTSA_STUDY\_Projects\Parkinson_Disease_Therapeutic_Game\_build\Parkinson Theraputic Game ( 12-09-2016)_Data\Managed\System.dll (this message is harmless)
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 <RI> Initialized touch support.
-UnloadTime: 1.547455 ms
+UnloadTime: 0.973430 ms
 Setting up 2 worker threads for Enlighten.
-  Thread -> id: 36c8 -> priority: 1 
-  Thread -> id: 36b8 -> priority: 1 
+  Thread -> id: 3c68 -> priority: 1 
+  Thread -> id: 1b5c -> priority: 1 
 Unloading 6 Unused Serialized files (Serialized files now loaded: 0)
-UnloadTime: 3.798515 ms
-System memory in use before: 30.1 MB.
-System memory in use after: 30.0 MB.
+UnloadTime: 4.149328 ms
+System memory in use before: 31.3 MB.
+System memory in use after: 31.3 MB.
 
-Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1400.
-Total: 0.525431 ms (FindLiveObjects: 0.112592 ms CreateObjectMapping: 0.022518 ms MarkObjects: 0.324345 ms  DeleteObjects: 0.056888 ms)
+Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1402.
+Total: 0.449579 ms (FindLiveObjects: 0.075851 ms CreateObjectMapping: 0.020543 ms MarkObjects: 0.299061 ms  DeleteObjects: 0.049382 ms)
+
+Please pick up Yellow  medicine!
+UnityEngine.DebugLogHandler:Internal_Log(LogType, String, Object)
+UnityEngine.DebugLogHandler:LogFormat(LogType, Object, String, Object[])
+UnityEngine.Logger:Log(LogType, Object)
+UnityEngine.Debug:Log(Object)
+PlayerMovementController:OnTriggerEnter(Collider) (at D:\UTSA_STUDY\_Projects\Parkinson_Disease_Therapeutic_Game\Assets\Scripts\PlayerMovementController.cs:654)
+ 
+(Filename: D:/UTSA_STUDY/_Projects/Parkinson_Disease_Therapeutic_Game/Assets/Scripts/PlayerMovementController.cs Line: 654)
 
 Waiting for finish

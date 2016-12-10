@@ -1,4 +1,5 @@
-# This is a comment. Please do not change anything unless you are sure what you are doing. :-)
+# Define how long the calibration time will be in seconds. 
+CALIBRATION_TIME=5
 
 # Define how much time the WALK animation will run for one step (left foot or right foot)
 WALK_DURATION=25
@@ -10,7 +11,7 @@ TURN_ANGLE=5
 TURN_LEAN_THRESHOLD=5
 
 # Define how much patient will have to take FOOT off the ground to make the avatar walk.
-FOOT_MOVEMENT_THRESHOLD=1
+FOOT_MOVEMENT_THRESHOLD=0.8
 
 # Define how much patient will have to LEAN BACKWARD to make the avatar WALK BACKWARD.
 LEAN_BACK_THRESHOLD=5

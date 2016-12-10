@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GamePlayScript {
 
@@ -43,7 +45,23 @@ public class GamePlayScript {
         timeToCrossSecond3M = new float[NUMBER_OF_RUN];     //DOOR => JUNCTION;
         timeToCrossThird3M = new float[NUMBER_OF_RUN];      //JUNCTION => MADECINE;
         numberOfSteps = new int[NUMBER_OF_RUN];
-        //setTask ( currentTask );
+
+
+        populateConfiguration();
+    }
+
+    private void populateConfiguration() {
+        Dictionary<String, double> conf = UtilitiesScript.readConfigurationFile();
+
+        conf.TryGetValue("WALK_DURATION", out Configuration.WALK_DURATION);
+        conf.TryGetValue("TURN_ANGLE", out Configuration.TURN_ANGLE);
+        conf.TryGetValue("FOOT_MOVEMENT_THRESHOLD", out Configuration.FOOT_MOVEMENT_THRESHOLD);
+        conf.TryGetValue("LEAN_BACK_THRESHOLD", out Configuration.LEAN_BACK_THRESHOLD);
+        conf.TryGetValue("HAND_FORWARD_THRESHOLD", out Configuration.HAND_FORWARD_THRESHOLD);
+        conf.TryGetValue("HAND_SIDEWISE_THRESHOLD", out Configuration.HAND_SIDEWISE_THRESHOLD);
+        conf.TryGetValue("TURN_LEAN_THRESHOLD", out Configuration.TURN_LEAN_THRESHOLD);
+        conf.TryGetValue("CALIBRATION_TIME", out Configuration.CALIBRATION_TIME);
+
     }
 
     public void pickUpMedecine() {
@@ -85,8 +103,6 @@ public class GamePlayScript {
                 isDuplicate = true;
             }
         }
-        //Debug.Log ( "pickUpDoor : currentRunNumber = " + currentRunNumber );
-        //Debug.Log ( "pickUpDoor : numberOfTaskCompleted = " + numberOfTaskCompleted );
     }
 
     public void setTask(int typeOfTask) {
@@ -142,7 +158,7 @@ public class GamePlayScript {
     }
 
     public int getRandomNumber(int min, int max) {
-        return Random.Range(min, max);
+        return UnityEngine.Random.Range(min, max);
     }
 
     public bool isAllTaskDone() {
@@ -160,4 +176,17 @@ public class GamePlayScript {
     public bool isComplexTaskTrial() {
         return this.currentRunNumber >= 2 && this.currentRunNumber <= 4;
     }
+}
+
+public class Configuration {
+    public static double WALK_DURATION;
+    public static double TURN_ANGLE;
+    public static double FOOT_MOVEMENT_THRESHOLD;
+    public static double LEAN_BACK_THRESHOLD;
+
+    public static double HAND_FORWARD_THRESHOLD;
+    public static double HAND_SIDEWISE_THRESHOLD;
+    public static double TURN_LEAN_THRESHOLD;
+    public static double CALIBRATION_TIME;
+
 }
