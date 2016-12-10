@@ -1,3 +1,5 @@
+#INSTRUCTION: please do not leave any space on either side of '=' sign here.
+
 # Define how long the calibration time will be in seconds. 
 CALIBRATION_TIME=5
 

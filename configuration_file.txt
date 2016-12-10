@@ -2,7 +2,7 @@
 CALIBRATION_TIME=5
 
 # Define how much time the WALK animation will run for one step (left foot or right foot)
-WALK_DURATION=25
+WALK_DURATION=100
 
 # Define how much abatar will turn per frame. DO NOT CHANGE
 TURN_ANGLE=5
