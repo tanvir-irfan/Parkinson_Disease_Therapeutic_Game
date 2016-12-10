@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using UnityEngine;
 
 public class UtilitiesScript {
     public static void writeTest(string p, string fileName, bool isAppendMode) {    
@@ -75,5 +76,13 @@ public class UtilitiesScript {
         conf.TryGetValue("HIGHER_RANGE", out HIGHER_RANGE);
         */
         return conf;
+    }
+
+    public static float clampAngle(float angle, float min, float max) {
+        if ( angle < -360F )
+            angle += 360F;
+        if ( angle > 360F )
+            angle -= 360F;
+        return Mathf.Clamp(angle, min, max);
     }
 }

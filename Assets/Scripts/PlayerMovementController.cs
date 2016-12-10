@@ -1,12 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using ReadWriteCsv;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using System.Net.Sockets;
 using System.Net;
-
-using ReadWriteCsv;
+using System.Net.Sockets;
+using System.Text;
+using UnityEngine;
 //using Microsoft.Samples.Kinect.BodyBasics;
 using Windows.Kinect;
 
@@ -53,9 +52,7 @@ public class PlayerMovementController : MonoBehaviour {
     private double topL = 0.0, topR = 0.0, bottomL = 0.0, bottomR = 0.0;
     private double topLC = 0.0, topRC = 0.0, bottomLC = 0.0, bottomRC = 0.0;
     private double calibrationCounterTL = 0, calibrationCounterTR = 0, calibrationCounterBL = 0, calibrationCounterBR = 0;
-    private double calibrationTh = 30;
-    private double walkMultiplier = 2.8;
-    private double smallTurnMultiplier = 2.3;
+    
     public bool isCalibrationStarted = false;
     public bool isCalibrationDone = false;
     public bool isKeyboardControlled = false;
@@ -87,16 +84,26 @@ public class PlayerMovementController : MonoBehaviour {
     private float turnTime = TURN_DURATION;
     private bool turnTimerStarted = false;
 
-    private static float MOVE_LEFT_OR_RIGHT_DURATION = 30f;
-    private float moveLeftOrRightTime = MOVE_LEFT_OR_RIGHT_DURATION;
-    private bool moveLeftOrRightTimerStarted = false;
+    //private static float MOVE_LEFT_OR_RIGHT_DURATION = 30f;
+    //private float moveLeftOrRightTime = MOVE_LEFT_OR_RIGHT_DURATION;
+    //private bool moveLeftOrRightTimerStarted = false;
 
     public GamePlayScript gp;
 
     bool walk = false;
     bool walkBackward = false;
     bool turn = false;
-    
+    Quaternion originalRotation;
+
+    //tanvir.irfan
+    private float minimumX = -360F;
+    private float maximumX = 360F;
+    public bool left;
+    public bool right;
+
+    float rotationX = 0F;
+    float rotationY = 0F;
+
 
     // Phone Controller
     public GameObject phoneNormal, phonePickUp, handset, phonebooth, junctionEmptObject, timerGameObject;
@@ -157,6 +164,11 @@ public class PlayerMovementController : MonoBehaviour {
     void Start() {
         animator = GetComponent<Animator>();
 
+        // Make the rigid body not change rotation
+        if ( GetComponent<Rigidbody>() )
+            GetComponent<Rigidbody>().freezeRotation = true;
+        originalRotation = transform.localRotation;
+        
         /*try {
             theClient = new UIVA_Client(ipUIVAServer);
         } catch (Exception ex) {
@@ -185,9 +197,9 @@ public class PlayerMovementController : MonoBehaviour {
 
     }
 
-    private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e) {
+    //private void Reader_FrameArrived(object sender, BodyFrameArrivedEventArgs e) {
         //Debug.Log ( "Reader_FrameArrived" );
-    }
+    //}
 
     // Assign value in the inspector. These are the color of the medicine
     public Texture2D[] textureToUse = new Texture2D[4];
@@ -249,10 +261,9 @@ public class PlayerMovementController : MonoBehaviour {
 
         packageReady = false;
     }
-    // Update is called once per frame
-    long fileCounter = 0;
-    void Update() {
-        fileCounter += 1;
+    
+    // Update is called once per frame    
+    void Update() {        
 
         /*if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
             Debug.Log("SHIFT");
@@ -264,18 +275,12 @@ public class PlayerMovementController : MonoBehaviour {
 
             if ( !reachForObject ) {
                 reachForObject = true;
-                animator.SetFloat("_Forward", 0);
-                animator.SetFloat("_Turn", 0);
-                animator.SetFloat("_Strafe", 0);
-                animator.SetFloat("_Grab", 1);
+                animator.SetBool("GrabR", true);
                 animator.speed = 0.75f;
             } else {
                 reachForObject = false;
-                animator.SetFloat("_Forward", 0);
-                animator.SetFloat("_Turn", 0);
-                animator.SetFloat("_Strafe", 0);
-                animator.SetFloat("_Grab", 0);
-                animator.speed = 0.75f;
+                animator.SetBool("GrabR", false);
+                animator.speed = 1f;
             }
 
             if ( reachForObject && packageReady ) {
@@ -288,22 +293,9 @@ public class PlayerMovementController : MonoBehaviour {
                     g.SetActive(true);
                 Invoke("hideDeliveredPackate", 3);
             }
-        }
+        }        
 
-        if ( Input.GetKeyDown(KeyCode.K) ) {
-            moveLeftOrRightTimerStarted = true;
-            animator.SetFloat("_Forward", 0);
-            animator.SetFloat("_Turn", 0);
-            animator.SetFloat("_Strafe", 1);
-
-
-        } else if ( Input.GetKeyDown(KeyCode.H) ) {
-            moveLeftOrRightTimerStarted = true;
-            animator.SetFloat("_Forward", 0);
-            animator.SetFloat("_Turn", 0);
-            animator.SetFloat("_Strafe", -1);
-        }
-
+        // counter to end the animation for walking and turning.
         if ( walkTimerStarted ) {
             walkTime -= 1;
             if ( walkTime <= 0.0f ) {
@@ -315,14 +307,7 @@ public class PlayerMovementController : MonoBehaviour {
             if ( turnTime <= 0.0f ) {
                 turnTimerEnded();
             }
-        }
-
-        /*if ( moveLeftOrRightTimerStarted ) {
-            moveLeftOrRightTime -= 1;
-            if ( moveLeftOrRightTime <= 0.0f ) {
-                moveLeftOrRightTimerEnded();
-            }
-        }*/
+        }        
 
     }
 
@@ -331,10 +316,15 @@ public class PlayerMovementController : MonoBehaviour {
         if ( isKeyboardControlled && isPlayerMovementAllowed ) {
             moveH = Input.GetAxis("Horizontal");
             moveV = Input.GetAxis("Vertical");
-            //animator.SetFloat("Walk", moveV);
-            //animator.SetFloat("SmallTurnDirection", moveH);
-            animator.SetFloat("_Forward", moveV);
-            animator.SetFloat("_Turn", moveH);
+            animator.SetFloat("Walk", moveV);
+
+            if ( moveH > 0 ) right = true;
+            else if ( moveH < 0 ) left = true;
+            else {
+                left = false;
+                right = false;
+            }
+            turnPlayer();
 
         } else {
             // the order of the function calling is important.
@@ -482,6 +472,21 @@ public class PlayerMovementController : MonoBehaviour {
         animator.SetBool("isMovingSideWise", isMovingSideWise);
         animator.SetFloat("MoveLeftRight", moveLeftRight);
 
+        turnPlayer();
+    }
+
+    public void turnPlayer() {
+        //tanvir.irfan TURN
+        if ( left )
+            rotationX += -1;
+        else if ( right )
+            rotationX += 1;
+        else
+            //rotationX += Input.GetAxis("Horizontal");
+            rotationX = UtilitiesScript.clampAngle(rotationX, minimumX, maximumX);
+
+        Quaternion xQuaternion = Quaternion.AngleAxis(rotationX, Vector3.up);
+        transform.localRotation = originalRotation * xQuaternion;
     }
 
     public void setMoveParameter(double leftFoot, double rightFoot, out float moveV, out float moveH) {
@@ -539,7 +544,6 @@ public class PlayerMovementController : MonoBehaviour {
             reachForObject = true;
             grabR = true;
         } else {
-
             grabL = false;
             grabR = false;
             reachForObject = false;
@@ -563,11 +567,11 @@ public class PlayerMovementController : MonoBehaviour {
         if ( !walkBackward && Math.Abs( LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
             isMovingSideWise = true;
             moveLeftRight = 1;
-            moveLeftOrRightTimerStarted = true;
+            //moveLeftOrRightTimerStarted = true;
         } else if ( !walkBackward && Math.Abs( RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
             isMovingSideWise = true;
             moveLeftRight = -1;
-            moveLeftOrRightTimerStarted = true;
+            //moveLeftOrRightTimerStarted = true;
         } else {
             isMovingSideWise = false;
             moveLeftRight = 0;
@@ -575,15 +579,18 @@ public class PlayerMovementController : MonoBehaviour {
 
         /*##########################    TURN    ##################################*/
         if ( Math.Abs(leanX) >= 0.5 ) {
-            moveH = leanX / 2;
-            //Debug.Log ( "moveH = " + moveH );
+            if ( leanX > 0 )  right = true;
+            else left = true;
+
+            moveH = 1;
         } else {
+            left = false;
+            right = false;
+
             moveH = 0;
         }
 
     }
-
-    string turnData = "";
 
     void walkTimerEnded() {
         walkTimerStarted = false;
@@ -599,15 +606,6 @@ public class PlayerMovementController : MonoBehaviour {
         //Debug.Log ( "TIMER : ENDED" );
         turnTime = WALK_DURATION;
     }
-
-    void moveLeftOrRightTimerEnded() {
-        moveLeftOrRightTimerStarted = false;
-        isMovingSideWise = false;
-        moveLeftOrRightTime = MOVE_LEFT_OR_RIGHT_DURATION;
-
-        moveLeftRight = 0;        
-    }
-
 
     void OnTriggerEnter(Collider other) {
         //Destroy(other.gameObject);        
@@ -790,8 +788,7 @@ public class PlayerMovementController : MonoBehaviour {
             kinectSensor = null;
         }
 
-        UtilitiesScript.writeTest(logData, "Data\\Log.csv", true);
-        UtilitiesScript.writeTest(turnData, "Data\\turnData.csv", true);
+        UtilitiesScript.writeTest(logData, "Data\\Log.csv", true);        
 
     }
 
