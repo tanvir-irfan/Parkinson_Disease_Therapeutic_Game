@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 
 public class UtilitiesScript {
-    public static void writeTest(string p, string fileName, bool isAppendMode) {
+    public static void writeTest(string p, string fileName, bool isAppendMode) {    
         // Write sample data to CSV file
         char[] delimiterChars = { '\n' };
         //FileStream fs = File.Create(fileName);

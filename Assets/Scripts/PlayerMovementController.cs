@@ -14,6 +14,10 @@ public class PlayerMovementController : MonoBehaviour {
     private Animator animator;
     private float moveH;
     private float moveV;
+    private bool grabR = false;
+    private bool grabL = false;
+    private bool isMovingSideWise = false;
+    private float moveLeftRight = 0.0f;
 
     //	these variables are used for WiiFit board and Kinnect
     UIVA_Client theClient;
@@ -92,7 +96,7 @@ public class PlayerMovementController : MonoBehaviour {
     bool walk = false;
     bool walkBackward = false;
     bool turn = false;
-    bool moveLeftOrRight = false;
+    
 
     // Phone Controller
     public GameObject phoneNormal, phonePickUp, handset, phonebooth, junctionEmptObject, timerGameObject;
@@ -168,9 +172,9 @@ public class PlayerMovementController : MonoBehaviour {
             if ( !kinectSensor.IsOpen ) {
                 kinectSensor.Open();
             }
-            if ( bodyFrameReader != null ) {
-                bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
-            }
+            //if ( bodyFrameReader != null ) {
+            //    bodyFrameReader.FrameArrived += this.Reader_FrameArrived;
+            //}
         } else {
             setKinectControlled(false);
         }
@@ -313,12 +317,12 @@ public class PlayerMovementController : MonoBehaviour {
             }
         }
 
-        if ( moveLeftOrRightTimerStarted ) {
+        /*if ( moveLeftOrRightTimerStarted ) {
             moveLeftOrRightTime -= 1;
             if ( moveLeftOrRightTime <= 0.0f ) {
                 moveLeftOrRightTimerEnded();
             }
-        }
+        }*/
 
     }
 
@@ -437,6 +441,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     float leanX = 0.0f;
     float leanY = 0.0f;
+
     public void calibrateData() {
         if ( isCalibrationStarted ) {
             //Debug.Log ( "isCalibrationStarted = " + isCalibrationStarted );
@@ -462,67 +467,24 @@ public class PlayerMovementController : MonoBehaviour {
     public void controllPlayer() {
         //Debug.Log("isPlayerMovementAllowed = " + isPlayerMovementAllowed); 
         if ( !isPlayerMovementAllowed ) {
-            animator.SetFloat("_Forward", 0.0f);
-            animator.SetFloat("_Turn", 0.0f);
+            animator.SetFloat("Walk", 0.0f);
             return;
         }
         //Debug.Log("controllPlayer");
-        setMoveParameter(gravX, gravY, LEFT_FOOT_POS[1], RIGHT_FOOT_POS[1], out moveV, out moveH);
-        animator.SetFloat("_Forward", moveV);
-        //animator.SetFloat("_Turn", Math.Abs(moveH));
-        animator.SetFloat("_Turn", moveH);
+        setMoveParameter(LEFT_FOOT_POS[1], RIGHT_FOOT_POS[1], out moveV, out moveH);
+
+        animator.SetFloat("Walk", moveV);
+        animator.SetBool("WalkBack", walkBackward);
+
+        animator.SetBool("GrabR", grabR);
+        animator.SetBool("GrabL", grabL);
+
+        animator.SetBool("isMovingSideWise", isMovingSideWise);
+        animator.SetFloat("MoveLeftRight", moveLeftRight);
 
     }
 
-    public void setMoveParameter(double gX, double gY, double leftFoot, double rightFoot, out float moveV, out float moveH) {
-
-        /*##########################    HAND MOVEMENT  ##################################*/
-        float handForward = 0.4f;
-        float handSideWise = 0.4f;
-
-        if ( ( SPINE_SHOLDER_POS[2] - LEFT_WRIST_POS[2] >= handForward ) ) {
-            reachForObject = true;
-            animator.SetFloat("_Forward", 0);
-            animator.SetFloat("_Turn", 0);
-            animator.SetFloat("_Strafe", 0);
-            animator.SetFloat("_Grab", -1);
-        } else if ( ( SPINE_SHOLDER_POS[2] - RIGHT_WRIST_POS[2] >= handForward ) ) {
-            reachForObject = true;
-            animator.SetFloat("_Forward", 0);
-            animator.SetFloat("_Turn", 0);
-            animator.SetFloat("_Strafe", 0);
-            animator.SetFloat("_Grab", 1);
-        } else {
-            reachForObject = false;
-            animator.SetFloat("_Grab", 0);
-        }
-
-        if ( reachForObject && packageReady ) {
-            outsideAvatar.GetComponent<Animator>().SetBool("deliverThePackage", false);
-            GameObject g = GameObject.FindGameObjectWithTag("PACKATE_DELIVERY");
-            if ( g != null )
-                g.SetActive(false);
-            g = GameObject.FindGameObjectWithTag("PACKATE_RECEIVED");
-            if ( g != null )
-                g.SetActive(true);
-            Invoke("hideDeliveredPackate", 3);
-        }
-
-        if ( moveLeftOrRightTimerStarted == false ) {
-            if ( ( LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
-                animator.SetFloat("_Forward", 0);
-                animator.SetFloat("_Turn", 0);
-                animator.SetFloat("_Strafe", -1);
-                animator.SetFloat("_Grab", 0);
-                moveLeftOrRightTimerStarted = true;
-            } else if ( ( RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
-                animator.SetFloat("_Forward", 0);
-                animator.SetFloat("_Turn", 0);
-                animator.SetFloat("_Strafe", 1);
-                animator.SetFloat("_Grab", 0);
-                moveLeftOrRightTimerStarted = true;
-            }
-        }
+    public void setMoveParameter(double leftFoot, double rightFoot, out float moveV, out float moveH) {
 
         /*##########################    WALK    ##################################*/
 
@@ -533,7 +495,7 @@ public class PlayerMovementController : MonoBehaviour {
         float leftFootDisplacement = ( float ) ( leftFoot - rightFoot );
         float rightFootDisplacement = ( float ) ( rightFoot - leftFoot );
 
-        if ( leftFootDisplacement >= footMovementTh ) {	//footMovementTh = 0.03
+        if ( leftFootDisplacement >= footMovementTh ) {
             if ( walkOnLeftF && !walkTimerStarted ) {
                 walk = true;
                 walkOnLeftF = false;
@@ -549,6 +511,8 @@ public class PlayerMovementController : MonoBehaviour {
                 walkTimerStarted = true;
                 //Debug.Log ( "TIMER : START" );
             }
+        } else {
+            walk = false;
         }
 
         if ( walk ) {
@@ -557,12 +521,57 @@ public class PlayerMovementController : MonoBehaviour {
             /*##########################    WALK BACKWARD  KKKKKKKKKKKKKKKKKKKKKKKK  ##################################*/
             if ( Math.Abs(leanY) >= 0.5 ) {
                 moveV = -1;
+                walkBackward = true;
             } else {
                 moveV = 0.0f;
+                walkBackward = false;
             }
         }
 
 
+        /*##########################    HAND MOVEMENT  ##################################*/
+        float handForward = 0.4f;
+
+        if ( !walkBackward && ( SPINE_SHOLDER_POS[2] - LEFT_WRIST_POS[2] >= handForward ) ) {
+            reachForObject = true;
+            grabL = true;
+        } else if ( !walkBackward && ( SPINE_SHOLDER_POS[2] - RIGHT_WRIST_POS[2] >= handForward ) ) {
+            reachForObject = true;
+            grabR = true;
+        } else {
+
+            grabL = false;
+            grabR = false;
+            reachForObject = false;
+        }
+
+
+        if ( reachForObject && packageReady ) {
+            outsideAvatar.GetComponent<Animator>().SetBool("deliverThePackage", false);
+            GameObject g = GameObject.FindGameObjectWithTag("PACKATE_DELIVERY");
+            if ( g != null )
+                g.SetActive(false);
+            g = GameObject.FindGameObjectWithTag("PACKATE_RECEIVED");
+            if ( g != null )
+                g.SetActive(true);
+            Invoke("hideDeliveredPackate", 3);
+        }
+
+        
+        float handSideWise = 0.4f;
+        
+        if ( !walkBackward && Math.Abs( LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
+            isMovingSideWise = true;
+            moveLeftRight = 1;
+            moveLeftOrRightTimerStarted = true;
+        } else if ( !walkBackward && Math.Abs( RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0] ) >= handSideWise ) {
+            isMovingSideWise = true;
+            moveLeftRight = -1;
+            moveLeftOrRightTimerStarted = true;
+        } else {
+            isMovingSideWise = false;
+            moveLeftRight = 0;
+        }        
 
         /*##########################    TURN    ##################################*/
         if ( Math.Abs(leanX) >= 0.5 ) {
@@ -593,13 +602,10 @@ public class PlayerMovementController : MonoBehaviour {
 
     void moveLeftOrRightTimerEnded() {
         moveLeftOrRightTimerStarted = false;
-        moveLeftOrRight = false;
+        isMovingSideWise = false;
         moveLeftOrRightTime = MOVE_LEFT_OR_RIGHT_DURATION;
 
-        animator.SetFloat("_Forward", 0);
-        animator.SetFloat("_Turn", 0);
-        animator.SetFloat("_Strafe", 0);
-        animator.SetFloat("_Grab", 0);
+        moveLeftRight = 0;        
     }
 
 
@@ -789,29 +795,4 @@ public class PlayerMovementController : MonoBehaviour {
 
     }
 
-    /*
-    public void writeTest(string p, string fileName)
-    {
-        // Write sample data to CSV file
-        char[] delimiterChars = { '\n' };
-
-        using (CsvFileWriter writer = new CsvFileWriter(fileName))
-        {
-            string[] allRows = p.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-            foreach (string rowData in allRows)
-            {
-                delimiterChars[0] = ',';
-                string[] allCol = rowData.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
-                CsvRow row = new CsvRow();
-                foreach (string colData in allCol)
-                {
-                    row.Add(colData);
-                }
-
-                writer.WriteRow(row);
-            }
-
-        }
-    }
-    */
 }
