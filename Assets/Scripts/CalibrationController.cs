@@ -78,7 +78,8 @@ public class CalibrationController : MonoBehaviour {
         pmc.isPlayerMovementAllowed = false;
 
         bool isKinectControlled = isKinectControlledT.GetComponent<Toggle>().isOn;
-        bool isdemo = isDemoRunningT.GetComponent<Toggle>().isOn;
+        //bool isdemo = isDemoRunningT.GetComponent<Toggle>().isOn;
+        bool isdemo = true ;
         bool isThirdPersonCam = isThirdPersonCamT.GetComponent<Toggle>().isOn;
 
         //Debug.Log("isKinectControlled = " + isKinectControlled);
