@@ -68,6 +68,7 @@ public class GamePlayScript {
         if ( isMedecineTaskDone == false ) {
             this.isMedecineTaskDone = true;
             numberOfTaskCompleted++;
+            Debug.Log ( "numberOfTaskCompleted = " + numberOfTaskCompleted + " / " + NUMBER_OF_TASK [currentRunNumber]);
         } else {
             Debug.Log("Too many madecine!");
         }
@@ -78,6 +79,7 @@ public class GamePlayScript {
             if ( isPhoneTaskDone == false ) {
                 isPhoneTaskDone = true;
                 numberOfTaskCompleted++;
+                Debug.Log ( "numberOfTaskCompleted = " + numberOfTaskCompleted + " / " + NUMBER_OF_TASK [ currentRunNumber ] );
             }
 
         } else {
@@ -96,6 +98,7 @@ public class GamePlayScript {
             if ( isDoorTaskDone == false ) {
                 isDoorTaskDone = true;
                 numberOfTaskCompleted++;
+		Debug.Log ( "numberOfTaskCompleted = " + numberOfTaskCompleted + " / " + NUMBER_OF_TASK [currentRunNumber]);
             }
         } else {
             if ( isTaskDoor && !isDuplicate ) {

@@ -716,17 +716,17 @@ public class PlayerMovementController : MonoBehaviour {
         if ( other.gameObject.tag == "BELL_OR_PHONE_RING" ) {
             junctionEmptObject.SetActive(false);
         }
-        if ( other.gameObject.tag == "DOOR_CLOSE_POSITION_OUTSIDE" ) {
+        if ( other.gameObject.tag == "DOOR_CLOSE_POSITION_OUTSIDE" || other.gameObject.tag == "DOOR_CLOSE_POSITION_INSIDE" ) {
             //Debug.Log ( "Time to Close Outside Door!" );
             ndc = ( NewDoorController ) other.gameObject.GetComponentInParent<NewDoorController>() as NewDoorController;
             if ( ndc.isDoorOpen )
                 ndc.controllDoor("DoorCloseT", true);
-        } else if ( other.gameObject.tag == "DOOR_CLOSE_POSITION_INSIDE" ) {
+        } /* else if ( other.gameObject.tag == "DOOR_CLOSE_POSITION_INSIDE" ) {
             //Debug.Log ( "Time to Close Inside Door!" );
             ndc = ( NewDoorController ) other.gameObject.GetComponentInParent<NewDoorController>() as NewDoorController;
             if ( ndc.isDoorOpen )
                 ndc.controllDoor("DoorCloseT", true);
-        }
+        } */
 
         if ( other.gameObject.tag == "BTN_START_POINT_AND_DOOR" ) {
             gp.isInBtnStartPointAndDoor = false;
