@@ -539,10 +539,8 @@ public class PlayerMovementController : MonoBehaviour {
 
         float handSideWise = ( float ) Configuration.HAND_SIDEWISE_THRESHOLD / 10;
 
-        if ( !walkBackward && Math.Abs(LEFT_WRIST_POS[0] - SPINE_SHOLDER_POS[0]) >= handSideWise ) {
             isMovingSideWise = true;
             moveLeftRight = 1;
-        } else if ( !walkBackward && Math.Abs(RIGHT_WRIST_POS[0] - SPINE_SHOLDER_POS[0]) >= handSideWise ) {
             isMovingSideWise = true;
             moveLeftRight = -1;
         } else {

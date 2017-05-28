@@ -74,7 +74,7 @@ public class ProcessPersonalInformation : MonoBehaviour {
 
             SceneManager.LoadScene("_MainScene");
         } else {
-            output.text = "Before Continue, Please Fill All The Fields Above";
+            output.text = "Before Continue, Please Fill All The Fields.";
         }
 
     }

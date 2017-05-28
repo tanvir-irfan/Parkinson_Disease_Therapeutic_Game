@@ -1,11 +1,11 @@
-﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkinson_Disease_Therapeutic_Game.Plugins", "Parkinson_Disease_Therapeutic_Game.Plugins.csproj", "{C8D8C9D6-CA32-2A0A-713E-01C733FCFD3D}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{01429D05-7CFB-805B-DF86-3F541DDB3025}") = "Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-firstpass.csproj", "{2308F5AE-24F2-7807-E06B-DBB9101C0148}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkinson_Disease_Therapeutic_Game", "Parkinson_Disease_Therapeutic_Game.csproj", "{99A8DEEE-0977-79B1-015B-896737591642}"
+Project("{01429D05-7CFB-805B-DF86-3F541DDB3025}") = "Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp.csproj", "{EF81D9A7-2742-F821-92CF-072F949C3121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parkinson_Disease_Therapeutic_Game.Editor.Plugins", "Parkinson_Disease_Therapeutic_Game.Editor.Plugins.csproj", "{EA2F4E39-22F7-56FC-D8C3-1696077F693D}"
+Project("{01429D05-7CFB-805B-DF86-3F541DDB3025}") = "Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-Editor-firstpass.csproj", "{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,20 +13,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C8D8C9D6-CA32-2A0A-713E-01C733FCFD3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C8D8C9D6-CA32-2A0A-713E-01C733FCFD3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C8D8C9D6-CA32-2A0A-713E-01C733FCFD3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C8D8C9D6-CA32-2A0A-713E-01C733FCFD3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{99A8DEEE-0977-79B1-015B-896737591642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{99A8DEEE-0977-79B1-015B-896737591642}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{99A8DEEE-0977-79B1-015B-896737591642}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{99A8DEEE-0977-79B1-015B-896737591642}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EA2F4E39-22F7-56FC-D8C3-1696077F693D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EA2F4E39-22F7-56FC-D8C3-1696077F693D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EA2F4E39-22F7-56FC-D8C3-1696077F693D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EA2F4E39-22F7-56FC-D8C3-1696077F693D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2308F5AE-24F2-7807-E06B-DBB9101C0148}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF81D9A7-2742-F821-92CF-072F949C3121}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3328B1DC-0B11-509D-1A65-D08CC2ADCAD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
 	EndGlobalSection
 EndGlobal

@@ -32,3 +32,8 @@ wristCounter = 0, leftWristC = NaN, rightWristC = NaN, leftFootC = NaN, rightFoo
 wristCounter = 0, leftWristC = NaN, rightWristC = NaN, leftFootC = NaN, rightFootC = NaN, gravX = 0, gravY = 0
 wristCounter = 250, leftWristC = 2.14835552024841, rightWristC = 2.15616036605835, leftFootC = 1.16504624843597, rightFootC = 1.13209766864777, gravX = 0, gravY = 0
 wristCounter = 250, leftWristC = 2.15714665603638, rightWristC = 2.16130867195129, leftFootC = 1.1621014547348, rightFootC = 1.1876947183609, gravX = 0, gravY = 0
+wristCounter = 250, leftWristC = 2.23026423454285, rightWristC = 2.3130018157959, leftFootC = 0.847473560571671, rightFootC = 0.820470551252365, gravX = 0, gravY = 0
+wristCounter = 250, leftWristC = 0.69980420589447, rightWristC = 0.740475120544434, leftFootC = 0.251422824382782, rightFootC = 0.249063156366348, gravX = 0, gravY = 0
+wristCounter = 250, leftWristC = 2.41526285076141, rightWristC = 2.49563229370117, leftFootC = 0.816190375804901, rightFootC = 0.798397126436234, gravX = 0, gravY = 0
+wristCounter = 250, leftWristC = 0, rightWristC = 0, leftFootC = 0, rightFootC = 0, gravX = 0, gravY = 0
+wristCounter = 250, leftWristC = 0, rightWristC = 0, leftFootC = 0, rightFootC = 0, gravX = 0, gravY = 0

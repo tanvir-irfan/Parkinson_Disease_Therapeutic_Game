@@ -1,0 +1,35 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{368FAE26-22D9-F188-ED24-AD55B23ED3FD}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-firstpass.csproj", "{18FCFF66-64F0-11E1-5D59-9E977AADB0EB}"
+EndProject
+Project("{368FAE26-22D9-F188-ED24-AD55B23ED3FD}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp.csproj", "{701BF1E0-BA23-7F8A-0F0B-D8F9591F1132}"
+EndProject
+Project("{368FAE26-22D9-F188-ED24-AD55B23ED3FD}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-Editor-firstpass.csproj", "{AA2CE29D-0EA3-A9B9-9294-037AA9049EDA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{18FCFF66-64F0-11E1-5D59-9E977AADB0EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18FCFF66-64F0-11E1-5D59-9E977AADB0EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18FCFF66-64F0-11E1-5D59-9E977AADB0EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18FCFF66-64F0-11E1-5D59-9E977AADB0EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{701BF1E0-BA23-7F8A-0F0B-D8F9591F1132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{701BF1E0-BA23-7F8A-0F0B-D8F9591F1132}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{701BF1E0-BA23-7F8A-0F0B-D8F9591F1132}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{701BF1E0-BA23-7F8A-0F0B-D8F9591F1132}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA2CE29D-0EA3-A9B9-9294-037AA9049EDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA2CE29D-0EA3-A9B9-9294-037AA9049EDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA2CE29D-0EA3-A9B9-9294-037AA9049EDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA2CE29D-0EA3-A9B9-9294-037AA9049EDA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
