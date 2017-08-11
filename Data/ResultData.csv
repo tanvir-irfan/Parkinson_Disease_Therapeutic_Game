@@ -22,3 +22,9 @@ runNumber,timeToCrossFirst3M,timeToCrossSecond3M,timeToCrossThird3M
 2,14.86015,66.60084,17.70021
 3,18.22023,41.26075,12.26009
 4,14.50014,43.06079,11.56007
+runNumber,timeToCrossFirst3M,timeToCrossSecond3M,timeToCrossThird3M
+0,13.24011,30.58051,10.64005
+runNumber,timeToCrossFirst3M,timeToCrossSecond3M,timeToCrossThird3M
+0,17.44021,20.12027,12.6201
+runNumber,timeToCrossFirst3M,timeToCrossSecond3M,timeToCrossThird3M
+0,15.82017,20.08027,12.7401

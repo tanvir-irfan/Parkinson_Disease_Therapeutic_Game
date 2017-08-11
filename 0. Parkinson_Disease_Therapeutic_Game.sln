@@ -1,11 +1,11 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{368FAE26-22D9-F188-ED24-AD55B23ED3FD}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-firstpass.csproj", "{18FCFF66-64F0-11E1-5D59-9E977AADB0EB}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-firstpass.csproj", "{18FCFF66-64F0-11E1-5D59-9E977AADB0EB}"
 EndProject
-Project("{368FAE26-22D9-F188-ED24-AD55B23ED3FD}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp.csproj", "{701BF1E0-BA23-7F8A-0F0B-D8F9591F1132}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp.csproj", "{701BF1E0-BA23-7F8A-0F0B-D8F9591F1132}"
 EndProject
-Project("{368FAE26-22D9-F188-ED24-AD55B23ED3FD}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-Editor-firstpass.csproj", "{AA2CE29D-0EA3-A9B9-9294-037AA9049EDA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "0. Parkinson_Disease_Therapeutic_Game", "Assembly-CSharp-Editor-firstpass.csproj", "{AA2CE29D-0EA3-A9B9-9294-037AA9049EDA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

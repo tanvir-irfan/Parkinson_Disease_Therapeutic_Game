@@ -81,7 +81,7 @@ public class PlayerMovementController : MonoBehaviour {
     public bool right;
 
     double rotationX = 0F;
-    double rotationY = 0F;
+    //double rotationY = 0F;
 
     float leanX = 0.0f;
     float leanY = 0.0f;
@@ -122,6 +122,8 @@ public class PlayerMovementController : MonoBehaviour {
 
     public Camera cam;
 
+    private const string SPAWN_POSITION = "SPAWN_POSITION";
+    private GameObject spawn_position;
 
     private int calibrationDataWriteCounter = 1;
 
@@ -191,6 +193,8 @@ public class PlayerMovementController : MonoBehaviour {
 
     void initializeGame() {
 
+        ResetPlayerPosition ( );
+
         showPhone(true);	// showing normal state.
         for ( int i = 0; i < blockWall.Length; i++ ) {
             blockWall[i].SetActive(true);
@@ -247,14 +251,36 @@ public class PlayerMovementController : MonoBehaviour {
         packageReady = false;
     }
 
+    void stopAnim ( ) {
+        gameObject.GetComponent<Animator> ( ).StopPlayback ( );
+        gameObject.GetComponent<Animator> ( ).enabled = false;
+    }
+
+    void startAnim ( ) {
+        gameObject.GetComponent<Animator> ( ).enabled = true;        
+        gameObject.GetComponent<Animator> ( ).Play ( "Idle", -1, 0 );
+    }
+
+    void ResetPlayerPosition ( ) {
+        spawn_position = GameObject.FindGameObjectWithTag ( "SPAWN_POSITION" );
+        if ( spawn_position != null ) {            
+            stopAnim ( );
+            this.gameObject.transform.position = spawn_position.transform.position;
+            this.gameObject.transform.eulerAngles = spawn_position.transform.eulerAngles;
+            rotationX = 0f;            
+            startAnim ( );
+        }
+    }
+
     // Update is called once per frame    
     void Update() {
 
-        /*if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
             Debug.Log("SHIFT");
-            if (Input.GetKeyDown(KeyCode.S))
-                Debug.Log("SHIFT + S");
-        }*/
+            if ( Input.GetKeyDown ( KeyCode.S ) ) {
+                Debug.Log ( "SHIFT + S" );                
+            }
+        }
 
         #region KEYBOARD INPUT HANDLING REGION
         if ( Input.GetKeyDown(KeyCode.Space) ) {
