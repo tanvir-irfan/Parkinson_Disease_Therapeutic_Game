@@ -601,9 +601,8 @@ public class PlayerMovementController : MonoBehaviour {
         gp.numberOfSteps[gp.currentRunNumber]++;
     }
 
-    void OnTriggerEnter(Collider other) {
-        //Destroy(other.gameObject);        
-        if ( other.gameObject.tag == "MEDICINE_RED"
+    void OnTriggerEnter(Collider other) {               
+        if (   other.gameObject.tag == "MEDICINE_RED"
             || other.gameObject.tag == "MEDICINE_YELLOW"
             || other.gameObject.tag == "MEDICINE_PINK"
             || other.gameObject.tag == "MEDICINE_BLUE" ) {
@@ -614,14 +613,10 @@ public class PlayerMovementController : MonoBehaviour {
                 } else if ( !gp.isTaskRedMedecine && other.gameObject.tag == "MEDICINE_YELLOW" ) {
                     isProperMedicine = true;
                 }
-                if ( isProperMedicine ) {
-                    other.gameObject.SetActive(false);
-                    gp.pickUpMedecine();                    
-                } else {
-                    string hint = "Please pick up " + ( gp.isTaskRedMedecine ? "RED " : "Yellow " ) + " medicine!";
-                    Debug.Log(hint);
-                }
 
+                // removing the medicine from the table.
+                other.gameObject.SetActive ( false );
+                gp.pickUpMedecine ( isProperMedicine );
             }
         }
         if ( other.gameObject.tag == "PHONE_PICKUP_BOX" && reachForObject ) {

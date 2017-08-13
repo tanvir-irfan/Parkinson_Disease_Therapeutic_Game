@@ -7,7 +7,6 @@ public class CalibrationController : MonoBehaviour {
         calScreenPanel, welcomePanel, goodByePanel, player, isKinectControlledT, isDemoRunningT, isThirdPersonCamT, timetTextT;
     public Text calScreenText;
     PlayerMovementController pmc;
-    TimerScript ts;
     bool isGamePaused = false;
     AudioSource instAudioSource;
 
@@ -27,11 +26,8 @@ public class CalibrationController : MonoBehaviour {
 
         CALIBRATION_TIME = Configuration.CALIBRATION_TIME;
         instAudioSource = ( AudioSource ) this.GetComponent<AudioSource>();
-        //Debug.Log("instAudioSource = " + instAudioSource);
 
         pmc.isPlayerMovementAllowed = false;
-
-        ts = ( TimerScript ) timetTextT.GetComponent("TimerScript");
     }
 
     public void Update() {
@@ -69,8 +65,6 @@ public class CalibrationController : MonoBehaviour {
 
         pmc.isPlayerMovementAllowed = true;
         pauseB.SetActive(true);
-
-        ts.showTime(true); // now it's time to show the time.
     }
 
     public void onClickInstructionButton() {

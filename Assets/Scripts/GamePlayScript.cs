@@ -21,6 +21,9 @@ public class GamePlayScript {
     public bool isTaskPhone, isTaskDoor, isTaskRedMedecine;
     private bool isPhoneTaskDone = false, isDoorTaskDone = false, isMedecineTaskDone = false;
     public int numberOfTaskCompleted;
+    
+    //NEW
+    public int wrongMedicinePicked;
 
     public bool isDuplicate = false;
     public bool playInstruction = false;
@@ -64,14 +67,18 @@ public class GamePlayScript {
 
     }
 
-    public void pickUpMedecine() {
-        if ( isMedecineTaskDone == false ) {
+    public void pickUpMedecine ( bool isProperMedicine ) {
+        //if ( isMedecineTaskDone == false ) {
+        if ( isProperMedicine ) {
             this.isMedecineTaskDone = true;
             numberOfTaskCompleted++;
-            Debug.Log ( "numberOfTaskCompleted = " + numberOfTaskCompleted + " / " + NUMBER_OF_TASK [currentRunNumber]);
+            Debug.Log ( "numberOfTaskCompleted = " + numberOfTaskCompleted + " / " + NUMBER_OF_TASK [ currentRunNumber ] );
         } else {
-            Debug.Log("Too many madecine!");
+            wrongMedicinePicked++;
         }
+        //} else {
+        //    Debug.Log("Too many madecine!");
+        //}
     }
 
     public void pickUpPhone() {
@@ -155,6 +162,7 @@ public class GamePlayScript {
     private void initializeScore() {
         //numberOfSteps = 0;
         //timeToCompleteTrial = 0;
+        wrongMedicinePicked = 0;
         isInBtnStartPointAndDoor = false;
         isInBtnDoorAndJunction = false;
         isInBtnJunctionAndMedicine = false;
