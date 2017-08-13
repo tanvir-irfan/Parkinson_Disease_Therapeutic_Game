@@ -7,8 +7,8 @@ public class Clock : MonoBehaviour {
     public int minutes;// = 0;
     public int hour;// = 0;
     public int seconds;// = 0;
-	public bool realTime=true;
-    public bool isVisible = false;
+    public bool realTime;//=true;
+    public bool isVisible;// = false;
 	
 	public GameObject pointerSeconds;
     public GameObject pointerMinutes;
@@ -41,8 +41,7 @@ public class Clock : MonoBehaviour {
 
 void Start() 
 {
-    if ( isVisible )
-        this.gameObject.SetActive ( false );
+    this.gameObject.SetActive ( isVisible );
 	//-- set real time
 	if (realTime)
 	{
