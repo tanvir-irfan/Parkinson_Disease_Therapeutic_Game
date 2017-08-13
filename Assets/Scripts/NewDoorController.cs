@@ -27,7 +27,7 @@ public class NewDoorController : MonoBehaviour {
                 }
                 //Debug.Log ( "NewDoorController : pickUpDoor" );
                 pmc.gp.pickUpDoor ( "NewDoorController" );
-                pmc.closeHallway(1, false);
+                //pmc.closeHallway(1, false);
                 Invoke("deliverPackage", 3);
             }
         }        

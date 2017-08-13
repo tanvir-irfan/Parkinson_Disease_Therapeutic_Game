@@ -90,7 +90,7 @@ public class PlayerMovementController : MonoBehaviour {
     // Phone Controller
     public GameObject phoneNormal, phonePickUp, handset, phonebooth, junctionEmptObject, timerGameObject;
     public GameObject[] medicinePack = new GameObject[4];
-    public GameObject[] blockWall = new GameObject[3];//0 = phone, 1 = medecine, 2 = door
+    
     private string[] medColor = { "MEDICINE_RED", "MEDICINE_YELLOW", "MEDICINE_PINK", "MEDICINE_BLUE" };
     // Assign value in the inspector. These are the colors of the medicine
     public Texture2D[] textureToUse = new Texture2D[4];
@@ -196,9 +196,7 @@ public class PlayerMovementController : MonoBehaviour {
         ResetPlayerPosition ( );
 
         showPhone(true);	// showing normal state.
-        for ( int i = 0; i < blockWall.Length; i++ ) {
-            blockWall[i].SetActive(true);
-        }
+        
         //initialize medicine pack
         for ( int i = 0; i < medicinePack.Length; i++ ) {
             medicinePack[i].SetActive(true);
@@ -275,12 +273,12 @@ public class PlayerMovementController : MonoBehaviour {
     // Update is called once per frame    
     void Update() {
 
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
-            Debug.Log("SHIFT");
-            if ( Input.GetKeyDown ( KeyCode.S ) ) {
-                Debug.Log ( "SHIFT + S" );                
-            }
-        }
+        //if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) {
+        //    Debug.Log("SHIFT");
+        //    if ( Input.GetKeyDown ( KeyCode.S ) ) {
+        //        Debug.Log ( "SHIFT + S" );                
+        //    }
+        //}
 
         #region KEYBOARD INPUT HANDLING REGION
         if ( Input.GetKeyDown(KeyCode.Space) ) {
@@ -618,11 +616,7 @@ public class PlayerMovementController : MonoBehaviour {
                 }
                 if ( isProperMedicine ) {
                     other.gameObject.SetActive(false);
-                    gp.pickUpMedecine();
-                    if ( gp.currentRunNumber < GamePlayScript.NUMBER_OF_RUN - 1 ) {
-                        closeHallway(0, true);
-                        closeHallway(2, true);
-                    }
+                    gp.pickUpMedecine();                    
                 } else {
                     string hint = "Please pick up " + ( gp.isTaskRedMedecine ? "RED " : "Yellow " ) + " medicine!";
                     Debug.Log(hint);
@@ -639,7 +633,6 @@ public class PlayerMovementController : MonoBehaviour {
                 phoneRing.Stop();
                 //Debug.Log ( "pickUpPhone" );
                 gp.pickUpPhone();
-                closeHallway(1, false);
             }
             isPhonePicked = !isPhonePicked;
         }
@@ -665,14 +658,11 @@ public class PlayerMovementController : MonoBehaviour {
 
         if ( other.gameObject.tag == "BELL_OR_PHONE_RING" ) {
             if ( gp.isTaskPhone ) {
-                phoneRing();
-                //also open the blocked hallway
-                closeHallway(0, false);
+                phoneRing();                
             }
             if ( gp.isTaskDoor ) {
                 doorBellRing();
                 outsideAvatar.SetActive(true);  // delivary boy is shown
-                closeHallway(2, false);
             }
         }
         if ( other.gameObject.tag == "GAME_INSTRUCTION_POINT" ) {
@@ -699,10 +689,6 @@ public class PlayerMovementController : MonoBehaviour {
         } else if ( other.gameObject.tag == "BTN_JUNCTION_AND_MEDICINE" ) {
             gp.isInBtnJunctionAndMedicine = true;
         }
-    }
-
-    public void closeHallway(int which, bool open) {
-        blockWall[which].SetActive(open);
     }
 
     public delegate void AudioCallback();
