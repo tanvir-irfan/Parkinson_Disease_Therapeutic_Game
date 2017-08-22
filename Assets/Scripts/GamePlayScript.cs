@@ -7,7 +7,6 @@ public class GamePlayScript
 {
 
 	public const int NUMBER_OF_RUN = 4;
-	public int[] NUMBER_OF_TASK = { 0, 2, 2, 3 };
 
 	public const int TASK_FAMILIARIZATION = 0;
 	public const int TASK_SINGLE = TASK_FAMILIARIZATION + 1;
@@ -22,8 +21,6 @@ public class GamePlayScript
 	#endregion
 
 	public int currentRunNumber;
-	public int currentTask;
-	public bool isTaskPhone, isTaskDoor, isTaskRedMedecine;
 
 	public bool playInstruction = false;
 
@@ -32,6 +29,8 @@ public class GamePlayScript
 	public bool isInBtnStartPointAndDoor;
 	public bool isInBtnDoorAndJunction;
 	public bool isInBtnJunctionAndMedicine;
+	public bool isInBtnJunctionAndDoor;
+	public bool isInBtnJunctionAndPhone;
 
 	public int currentPosition;
 	//
@@ -45,8 +44,6 @@ public class GamePlayScript
 
 		Debug.Log ("GamePlayScript : allTasks " + allTasks.Length);
 		currentRunNumber = -1;
-		currentTask = 0;
-		//initializeTask ();
 
 		populateConfiguration ();
 	}
@@ -66,41 +63,48 @@ public class GamePlayScript
 
 	}
 
-	public void pickUpMedecine (bool isProperMedicine)
+	public void pickUpMedecine (string med, GamePhase gmPh)
 	{
-		if (isProperMedicine) {
-			//this.isMedecineTaskDone = true;
-		} else {
-			//wrongMedicinePicked++;
-		}        
+		if (this.allTasks [this.currentRunNumber].medicine == null) {
+			this.allTasks [this.currentRunNumber].medicine = new List<MedicineTask> ();
+		}
+		MedicineTask m = null;
+		MyColor cm = this.allTasks [this.currentRunNumber].correctMed;
+		switch (med) {
+		case "MEDICINE_RED":
+			m = new MedicineTask (MyColor.Red, GamePlayScript.GetCurrentMilli (), ((cm == MyColor.Red || gmPh == GamePhase.Familiarization) ? true : false));
+			this.allTasks [this.currentRunNumber].medicine.Add (m);
+			break;
+		case "MEDICINE_YELLOW":
+			m = new MedicineTask (MyColor.Yellow, GamePlayScript.GetCurrentMilli (), ((cm == MyColor.Yellow || gmPh == GamePhase.Familiarization) ? true : false));
+			this.allTasks [this.currentRunNumber].medicine.Add (m);
+			break;
+		case "MEDICINE_PINK":
+			m = new MedicineTask (MyColor.Pink, GamePlayScript.GetCurrentMilli (), (gmPh == GamePhase.Familiarization ? true : false));
+			this.allTasks [this.currentRunNumber].medicine.Add (m);
+			break;
+		case "MEDICINE_BLUE":
+			m = new MedicineTask (MyColor.Blue, GamePlayScript.GetCurrentMilli (), (gmPh == GamePhase.Familiarization ? true : false));
+			this.allTasks [this.currentRunNumber].medicine.Add (m);
+			break;
+		}
+		Debug.Log ("pickUpMedecine : " + med + "Collected, Medicine Size = " + this.allTasks [this.currentRunNumber].medicine.Count);
 	}
 
 	public void pickUpPhone ()
 	{
-		if (this.currentRunNumber == 0 || this.currentRunNumber == 5) {
-			//if (isPhoneTaskDone == false) {
-			//	isPhoneTaskDone = true;
-			//}
-
-		} else {
-			if (isTaskPhone) {
-				//isPhoneTaskDone = true;
-			}
+		if (this.allTasks [this.currentRunNumber].phone == null) {
+			this.allTasks [this.currentRunNumber].phone = new List<double> ();
 		}
+		this.allTasks [this.currentRunNumber].phone.Add (GamePlayScript.GetCurrentMilli ());
 	}
 
 	public void pickUpDoor (string callingFunc)
 	{
-		if (this.currentRunNumber == 0 || this.currentRunNumber == 5) {
-			//if (isDoorTaskDone == false) {
-			//	isDoorTaskDone = true;
-			//}
-		} else {
-			if (isTaskDoor /*&& !isDuplicate*/) {
-				//numberOfTaskCompleted++;
-				//isDuplicate = true;
-			}
+		if (this.allTasks [this.currentRunNumber].door == null) {
+			this.allTasks [this.currentRunNumber].door = new List<double> ();
 		}
+		this.allTasks [this.currentRunNumber].door.Add (GamePlayScript.GetCurrentMilli ());
 	}
 
 	public Task getCurrentTask ()
@@ -121,16 +125,6 @@ public class GamePlayScript
 		initializeTask ();
 	}
 
-	public int getIndexOfTask ()
-	{
-		if (isTaskPhone) {
-			return 1;   // RIGHT_PHONE_RED
-		} else if (isTaskDoor) {
-			return 0;   // LEFT_DOOR_YELLOW
-		}
-		return 0;
-	}
-
 	private void initializeTask ()
 	{
 		Debug.Log ("initializeTask : this.currentRunNumber = " + this.currentRunNumber);
@@ -144,14 +138,14 @@ public class GamePlayScript
 		allTasks [this.currentRunNumber].isPhoneDone = false;
 		allTasks [this.currentRunNumber].isDoorDone = false;
 
-		allTasks [this.currentRunNumber].door = new List<long> ();
-		allTasks [this.currentRunNumber].phone = new List<long> ();
+		allTasks [this.currentRunNumber].door = new List<double> ();
+		allTasks [this.currentRunNumber].phone = new List<double> ();
 
-		allTasks [this.currentRunNumber].timeSpentin1st3M = 0;
-		allTasks [this.currentRunNumber].timeSpentin2nd3M = 0;
-		allTasks [this.currentRunNumber].timeSpentin3rd3M = 0;
+		allTasks [this.currentRunNumber].timeBtnStartAndDoor = 0;
+		allTasks [this.currentRunNumber].timeBtnDoorAndJunc = 0;
+		allTasks [this.currentRunNumber].timeBtnJuncAndMed = 0;
 
-		allTasks [this.currentRunNumber].medicine = new Dictionary<MyColor, long> ();
+		allTasks [this.currentRunNumber].medicine = new List<MedicineTask> ();
 
 		isInBtnStartPointAndDoor = false;
 		isInBtnDoorAndJunction = false;
@@ -231,9 +225,24 @@ public class Task
 			this.isDoor = true;
 			break;
 		case GamePhase.DuelTask:
-		case GamePhase.SingleTask:			
 			SetCorrectMedColor ();
 			break;
+		case GamePhase.SingleTask:
+			SetCorrectMedColor ();
+			SetSingleTask ();
+			break;
+		}
+	}
+
+	private void SetSingleTask ()
+	{
+		int rand = UnityEngine.Random.Range (0, 23);
+		if (rand % 2 == 0) {
+			this.isPhone = true;
+			this.isDoor = false;
+		} else {
+			this.isPhone = false;
+			this.isDoor = true;
 		}
 	}
 
@@ -264,17 +273,21 @@ public class Task
 	public bool isDoorDone;
 	public bool isPhoneDone;
 
-	public List<long> door;
-	public List<long> phone;
+	public List<double> door;
+	public List<double> phone;
 	//START => DOOR
-	public float timeSpentin1st3M;
+	public float timeBtnStartAndDoor;
 	//DOOR => JUNCTION;
-	public float timeSpentin2nd3M;
+	public float timeBtnDoorAndJunc;
 	//JUNCTION => MADECINE;
-	public float timeSpentin3rd3M;
+	public float timeBtnJuncAndMed;
+	//JUNCTION => DOOR;
+	public float timeBtnJuncAndDoor;
+	//JUNCTION => PHONE;
+	public float timeBtnJuncAndPhone;
 
 	public MyColor correctMed;
-	public Dictionary <MyColor, long> medicine;
+	public List<MedicineTask> medicine;
 }
 
 public enum MyColor
@@ -290,4 +303,22 @@ public enum GamePhase
 	Familiarization,
 	SingleTask,
 	DuelTask
+}
+
+public class MedicineTask
+{
+	public MyColor col;
+	public double time;
+	public bool isCorrect;
+
+	public MedicineTask (MyColor c, double time) : this (c, time, false)
+	{		
+	}
+
+	public MedicineTask (MyColor c, double time, bool isCor)
+	{
+		this.col = c;
+		this.time = time;
+		this.isCorrect = isCor;
+	}
 }

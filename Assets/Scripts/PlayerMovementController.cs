@@ -290,27 +290,29 @@ public class PlayerMovementController : MonoBehaviour
 		//}
 
 		#region KEYBOARD INPUT HANDLING REGION
-		if (Input.GetKeyDown (KeyCode.Space)) {
+		if (isKeyboardControlled && isPlayerMovementAllowed) {
+			if (Input.GetKeyDown (KeyCode.Space)) {
 
-			if (!reachForObject) {
-				reachForObject = true;
-				animator.SetBool ("GrabR", true);
-				animator.speed = 0.75f;
-			} else {
-				reachForObject = false;
-				animator.SetBool ("GrabR", false);
-				animator.speed = 1f;
-			}
+				if (!reachForObject) {
+					reachForObject = true;
+					animator.SetBool ("GrabR", true);
+					animator.speed = 0.75f;
+				} else {
+					reachForObject = false;
+					animator.SetBool ("GrabR", false);
+					animator.speed = 1f;
+				}
 
-			if (reachForObject && packageReady) {
-				outsideAvatar.GetComponent<Animator> ().SetBool ("deliverThePackage", false);
-				GameObject g = GameObject.FindGameObjectWithTag ("PACKATE_DELIVERY");
-				if (g != null)
-					g.SetActive (false);
-				g = GameObject.FindGameObjectWithTag ("PACKATE_RECEIVED");
-				if (g != null)
-					g.SetActive (true);
-				Invoke ("hideDeliveredPackate", 3);
+				if (reachForObject && packageReady) {
+					outsideAvatar.GetComponent<Animator> ().SetBool ("deliverThePackage", false);
+					GameObject g = GameObject.FindGameObjectWithTag ("PACKATE_DELIVERY");
+					if (g != null)
+						g.SetActive (false);
+					g = GameObject.FindGameObjectWithTag ("PACKATE_RECEIVED");
+					if (g != null)
+						g.SetActive (true);
+					Invoke ("hideDeliveredPackate", 3);
+				}
 			}
 		}
 		#endregion        
@@ -373,14 +375,15 @@ public class PlayerMovementController : MonoBehaviour
 		}
 
 		if (gp.isInBtnStartPointAndDoor) {
-			//gp.timeToCrossFirst3M[gp.currentRunNumber] += Time.deltaTime;
-			gp.allTasks [gp.currentRunNumber].timeSpentin1st3M += Time.deltaTime;
+			gp.allTasks [gp.currentRunNumber].timeBtnStartAndDoor += Time.deltaTime;
 		} else if (gp.isInBtnDoorAndJunction) {
-			//gp.timeToCrossSecond3M[gp.currentRunNumber] += Time.deltaTime;
-			gp.allTasks [gp.currentRunNumber].timeSpentin2nd3M += Time.deltaTime;
+			gp.allTasks [gp.currentRunNumber].timeBtnDoorAndJunc += Time.deltaTime;
 		} else if (gp.isInBtnJunctionAndMedicine) {
-			//gp.timeToCrossThird3M[gp.currentRunNumber] += Time.deltaTime;
-			gp.allTasks [gp.currentRunNumber].timeSpentin3rd3M += Time.deltaTime;
+			gp.allTasks [gp.currentRunNumber].timeBtnJuncAndMed += Time.deltaTime;
+		} else if (gp.isInBtnJunctionAndDoor) {
+			gp.allTasks [gp.currentRunNumber].timeBtnJuncAndDoor += Time.deltaTime;
+		} else if (gp.isInBtnJunctionAndPhone) {
+			gp.allTasks [gp.currentRunNumber].timeBtnJuncAndPhone += Time.deltaTime;
 		}
 	}
 
@@ -625,25 +628,13 @@ public class PlayerMovementController : MonoBehaviour
 	}
 
 	void OnTriggerEnter (Collider other)
-	{               
-		if (other.gameObject.tag == "MEDICINE_RED"
-		    || other.gameObject.tag == "MEDICINE_YELLOW"
-		    || other.gameObject.tag == "MEDICINE_PINK"
-		    || other.gameObject.tag == "MEDICINE_BLUE") {
+	{
+		if (other.gameObject.tag.Contains ("MEDICINE_")) {
 			if (reachForObject) {
-				bool isProperMedicine = false;
-				if (gp.currentRunNumber == 0) {
-					isProperMedicine = true;
-				} else {
-					if (gp.isTaskRedMedecine && other.gameObject.tag == "MEDICINE_RED") {
-						isProperMedicine = true;
-					} else if (!gp.isTaskRedMedecine && other.gameObject.tag == "MEDICINE_YELLOW") {
-						isProperMedicine = true;
-					}
-				}
+				
 				// removing the medicine from the table.
 				other.gameObject.SetActive (false);
-				gp.pickUpMedecine (isProperMedicine);
+				gp.pickUpMedecine (other.gameObject.tag, gp.allTasks [gp.currentRunNumber].gamePhase);
 			}
 		}
 		if (other.gameObject.tag == "PHONE_PICKUP_BOX" && reachForObject) {
@@ -651,7 +642,7 @@ public class PlayerMovementController : MonoBehaviour
 
 			//rign the phone.
 			UnityEngine.AudioSource phoneRing = (UnityEngine.AudioSource)phonebooth.GetComponent<UnityEngine.AudioSource> () as UnityEngine.AudioSource;
-			if (phoneRing.isPlaying) {
+			if (phoneRing != null && phoneRing.isPlaying) {
 				phoneRing.Stop ();
 				//Debug.Log ( "pickUpPhone" );
 				gp.pickUpPhone ();
@@ -678,14 +669,15 @@ public class PlayerMovementController : MonoBehaviour
 		}
 
 		if (other.gameObject.tag == "BELL_OR_PHONE_RING") {
-			if (gp.isTaskPhone) {
+			if (gp.allTasks [gp.currentRunNumber].isPhone) {
 				phoneRing ();                
 			}
-			if (gp.isTaskDoor) {
+			if (gp.allTasks [gp.currentRunNumber].isDoor) {
 				doorBellRing ();
 				outsideAvatar.SetActive (true);  // delivary boy is shown
 			}
 		}
+		/*
 		if (other.gameObject.tag == "GAME_INSTRUCTION_POINT") {			
 			if (gp.playInstruction) {
 				gp.playInstruction = false;
@@ -697,7 +689,7 @@ public class PlayerMovementController : MonoBehaviour
 				PlaySoundWithCallback (aS, AudioFinished);
 			}
 		}
-
+		*/
 		if (other.gameObject.tag == "TRIAL_START_FLAG_REGION") {			
 			Debug.Log ("TRIAL_START_FLAG_REGION");
 			gp.SetTrialStartFlag (true);
@@ -709,10 +701,16 @@ public class PlayerMovementController : MonoBehaviour
 			gp.isInBtnDoorAndJunction = true;
 		} else if (other.gameObject.tag == "BTN_JUNCTION_AND_MEDICINE") {
 			gp.isInBtnJunctionAndMedicine = true;
+		} else if (other.gameObject.tag == "BTN_JUNCTION_AND_DOOR") {
+			gp.isInBtnJunctionAndDoor = true;
+		} else if (other.gameObject.tag == "BTN_JUNCTION_AND_PHONE") {
+			gp.isInBtnJunctionAndPhone = true;
 		} else {
 			gp.isInBtnStartPointAndDoor = false;
 			gp.isInBtnDoorAndJunction = false;
 			gp.isInBtnJunctionAndMedicine = false;
+			gp.isInBtnJunctionAndDoor = false;
+			gp.isInBtnJunctionAndPhone = false;
 		}
 	}
 
