@@ -1,0 +1,3 @@
+#Parkinson Therapeutic Game (Unity3d, C#):
+- People with Parkinson’s have problem with their balance and their interaction with real world objects e.g. pick up medicine, opening the door etc. They also face problems following the specific instructions. I build a game where people with Parkinson will walk through a narrow hallway and follow some specific instructions that ask them to finish some tasks like answering the phone, answering the door, picking up right medicine. 
+- I used Microsoft Kinect V2 to track the participant’s body and walking and Wii Balance board to measure their balance while they are walking.
